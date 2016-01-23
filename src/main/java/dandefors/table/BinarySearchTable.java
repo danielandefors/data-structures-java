@@ -6,21 +6,54 @@ import java.util.NoSuchElementException;
 
 /**
  * <p>
- *   Ordered symbol table that uses binary search, which gives us a logarithmic search time (O(lg N)).
+ * Ordered symbol table that uses binary search, which gives us a logarithmic search time (O(lg N)).
  * </p>
  * <p>
- *   Insert and delete operations will also require logarithmic time for finding the correct location to insert into or
- *   delete from. However, these operations will incur addition cost for array resizing and to shift key-value pairs.
- *   The array size is doubled (increased by a factor of two) every time an insert operation finds that the current
- *   capacity is insufficient to hold the new key-value pair. The initial capacity is two (unless a different capacity
- *   was given in the constructor) which means that the number of array resize operations will be ~ lg N. (More
- *   precisely, if N is a power of two the number of resize operations will be lg N - 1.) As such, the cumulative
- *   number of array access operations required to copy data upon resizing arrays is less than 4N (2N read and 2N write).
- *   The number of array accesses to shift data in the worst case is 2N (N read and N write), with an average of half
- *   that for random data. Overall, insert and delete operations run in linearithmic time worst case.
+ * Insert and delete operations will also require logarithmic time for finding the correct location to insert into or
+ * delete from. However, these operations will incur addition cost for array resizing and to shift key-value pairs.
+ * The array size is doubled (increased by a factor of two) every time an insert operation finds that the current
+ * capacity is insufficient to hold the new key-value pair. The initial capacity is two (unless a different capacity
+ * was given in the constructor) which means that the number of array resize operations will be ~ lg N. (More
+ * precisely, if N is a power of two the number of resize operations will be lg N - 1.) As such, the cumulative
+ * number of array access operations required to copy data upon resizing arrays is less than 4N (2N read and 2N write).
+ * The number of array accesses to shift data in the worst case is 2N (N read and N write), with an average of half
+ * that for random data. Overall, insert and delete operations run in linearithmic time worst case.
+ * </p>
+ * <p>
+ * Estimated memory usage for a table of size N is between 88 + 16N bytes (for a load factor of 100%) and 88 +
+ * 64N bytes (25% load factor). Actual memory usage is implementation dependent.
  * </p>
  */
 public class BinarySearchTable<K extends Comparable<K>, V> implements OrderedSymbolTable<K, V> {
+
+    /*
+
+    Memory usage analysis:
+
+    object overhead : 16 bytes
+    array references : 16 bytes
+    integer : 4 bytes
+    padding : 4 bytes
+
+    Each array (of size C):
+
+        array overhead : 24 bytes
+        array elements : 8C bytes
+
+
+    Load factor will be between 25% and 100%, therefore:
+
+        N <= C <= 4N
+
+    Worst case (25% lf):
+
+        40 + 2(24 + 32N) = 88 + 64N
+
+    Best case (100% lf):
+
+        40 + 2(24 + 8N) = 88 + 16N
+
+     */
 
     private K[] keys;
     private V[] values;
