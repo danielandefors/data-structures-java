@@ -26,12 +26,12 @@ public class SequentialSearchTable<K, V> implements SymbolTable<K, V> {
 
      */
 
-    private Node<K, V> head;
+    protected Node<K, V> head;
 
-    private static class Node<K, V> {
-        private K key;
-        private V value;
-        private Node<K, V> tail;
+    protected static class Node<K, V> {
+        protected final K key;
+        protected V value;
+        protected Node<K, V> tail;
 
         public Node(K key, V value, Node<K, V> tail) {
             this.key = key;
