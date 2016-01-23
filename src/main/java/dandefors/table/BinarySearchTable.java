@@ -53,6 +53,10 @@ public class BinarySearchTable<K extends Comparable<K>, V> implements OrderedSym
 
         40 + 2(24 + 8N) = 88 + 16N
 
+    If you don't do any deletes worst case load factor (for a non-empty table) will be 50%, thus:
+
+        40 + 2(24 + 16N) = 88 + 32N
+
      */
 
     private K[] keys;

@@ -9,6 +9,23 @@ import java.util.Iterator;
  */
 public class SequentialSearchTable<K, V> implements SymbolTable<K, V> {
 
+    /*
+    Memory usage analysis:
+
+    object overhead : 16 bytes
+    object references : 1x8 = 8 bytes
+
+    Each node:
+
+        object overhead : 16 bytes
+        object references : 3x8 = 24 bytes
+
+    Total memory usage:
+
+        24 + 40N
+
+     */
+
     private Node<K, V> head;
 
     private static class Node<K, V> {
