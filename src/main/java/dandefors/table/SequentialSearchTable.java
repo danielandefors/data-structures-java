@@ -7,7 +7,7 @@ import java.util.Iterator;
  * performance on most operations to search and modify the table are linear (in the size of the table). As such it is
  * not suitable for large amounts of data.
  */
-public class SequentialSearchST<K, V> implements SymbolTable<K, V> {
+public class SequentialSearchTable<K, V> implements SymbolTable<K, V> {
 
     private Node<K, V> head;
 

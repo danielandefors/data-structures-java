@@ -1,7 +1,9 @@
 package dandefors.table;
 
 /**
+ * A symbol table.
  *
+ * @see OrderedSymbolTable
  */
 public interface SymbolTable<K, V> {
 
