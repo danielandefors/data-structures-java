@@ -5,10 +5,20 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Ordered symbol table that uses binary search, which gives us a logarithmic time search time (O(lg N)). Insert and
- * delete operations will also require logarithmic time for finding the correct location to insert into or delete from.
- * However, these operations will incur addition cost for array resizing (size is increased by a factor of two) and
- * shifting elements (worst case N, average ~N/2 for random data).
+ * <p>
+ *   Ordered symbol table that uses binary search, which gives us a logarithmic search time (O(lg N)).
+ * </p>
+ * <p>
+ *   Insert and delete operations will also require logarithmic time for finding the correct location to insert into or
+ *   delete from. However, these operations will incur addition cost for array resizing and to shift key-value pairs.
+ *   The array size is doubled (increased by a factor of two) every time an insert operation finds that the current
+ *   capacity is insufficient to hold the new key-value pair. The initial capacity is two (unless a different capacity
+ *   was given in the constructor) which means that the number of array resize operations will be ~ lg N. (More
+ *   precisely, if N is a power of two the number of resize operations will be lg N - 1.) As such, the cumulative
+ *   number of array access operations required to copy data upon resizing arrays is less than 4N (2N read and 2N write).
+ *   The number of array accesses to shift data in the worst case is 2N (N read and N write), with an average of half
+ *   that for random data. Overall, insert and delete operations run in linearithmic time worst case.
+ * </p>
  */
 public class BinarySearchTable<K extends Comparable<K>, V> implements OrderedSymbolTable<K, V> {
 
@@ -17,11 +27,29 @@ public class BinarySearchTable<K extends Comparable<K>, V> implements OrderedSym
     private int size;
 
     public BinarySearchTable() {
-        this(1);
+        this(2);
     }
 
     public BinarySearchTable(int capacity) {
         resize(capacity);
+    }
+
+    /**
+     * Get the current capacity. I.e., the size of the underlying arrays.
+     *
+     * @return The current capacity.
+     */
+    public int capacity() {
+        return keys.length;
+    }
+
+    /**
+     * Get the current load factor. I.e., the ratio between the size of the table and its capacity.
+     *
+     * @return The load factor.
+     */
+    public float getLoadFactor() {
+        return (float) size / capacity();
     }
 
     private void resize(int capacity) {
@@ -48,7 +76,7 @@ public class BinarySearchTable<K extends Comparable<K>, V> implements OrderedSym
             // Delete the key at the given index
             if (i < size && keys[i].compareTo(key) == 0) {
                 size--;
-                if (size == keys.length / 4) {
+                if (size > 0 && size == keys.length / 4) {
                     resize(keys.length / 2);
                 }
                 System.arraycopy(keys, i + 1, keys, i, size - i);
