@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.*;
 
 /**
@@ -125,8 +124,8 @@ public abstract class OrderedSymbolTableTest extends SymbolTableTest {
 
         assertNull(t.ceiling("NOTHING"));
 
-        t.put("E", "THIS");
         t.put("S", "IS A");
+        t.put("E", "THIS");
         t.put("T", "TEST");
 
         assertEquals("E", t.ceiling("B"));
@@ -196,15 +195,15 @@ public abstract class OrderedSymbolTableTest extends SymbolTableTest {
         t.put("DDD", "");
         t.put("EE", "");
 
-        assertThat(t.keys("C", "C"), hasItems("C"));
+        assertIterableEquals(t.keys("C", "C"), "C");
         assertEquals(1, t.size("C", "C"));
-        assertThat(t.keys("B", "C"), hasItems("B", "BB", "BBB", "C"));
+        assertIterableEquals(t.keys("B", "C"), "B", "BB", "BBB", "C");
         assertEquals(4, t.size("B", "C"));
-        assertThat(t.keys("DD", "E"), hasItems("DDD"));
+        assertIterableEquals(t.keys("DD", "E"), "DDD");
         assertEquals(1, t.size("DD", "E"));
-        assertThat(t.keys("0", "X"), hasItems("A", "AA", "B", "BB", "BBB", "C", "D", "DDD", "EE"));
+        assertIterableEquals(t.keys("0", "X"), "A", "AA", "B", "BB", "BBB", "C", "D", "DDD", "EE");
         assertEquals(9, t.size("0", "X"));
-        assertFalse(t.keys("E", "A").iterator().hasNext());
+        assertIterableEquals(t.keys("E", "A"));
         assertEquals(0, t.size("E", "A"));
     }
 
@@ -250,6 +249,19 @@ public abstract class OrderedSymbolTableTest extends SymbolTableTest {
         assertTrue(t.isEmpty());
 
 
+    }
+
+    static void assertIterableEquals(Iterable<String> c, String... values) {
+        Iterator<String> itr = c.iterator();
+        for (String s : values) {
+            if (!itr.hasNext()) {
+                fail(String.format("Expected \"%s\" but was empty", s));
+            }
+            assertEquals(s, itr.next());
+        }
+        if (itr.hasNext()) {
+            fail(String.format("Expected empty but was \"%s\"", itr.next()));
+        }
     }
 
 }
