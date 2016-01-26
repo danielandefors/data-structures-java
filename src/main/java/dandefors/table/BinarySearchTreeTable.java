@@ -281,7 +281,7 @@ public class BinarySearchTreeTable<K extends Comparable<K>, V> implements Ordere
                 return node.left;
             } else if (node.right.left == null) {
                 // Replace node with its right subtree.
-                // Set the left subtree as the left subtree of the right node.
+                // Move the left subtree to the right node.
                 node.right.left = node.left;
                 node.right.size += size(node.left);
                 return node.right;
