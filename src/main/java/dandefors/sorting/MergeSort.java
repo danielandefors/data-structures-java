@@ -25,32 +25,35 @@ public class MergeSort implements ArraySorter {
 
     protected void merge(int[] a, int p, int q, int r) {
 
-        // Copy sub-arrays to not overwrite them
-        int[] lo = new int[q - p + 1];
-        System.arraycopy(a, p, lo, 0, lo.length);
-        int[] hi = new int[r - q];
-        System.arraycopy(a, q + 1, hi, 0, hi.length);
+        // Skip merge if the array is already sorted
+        if (a[q] < a[q + 1]) {
+            return;
+        }
 
+        // Copy this section of the array
+        int[] b = new int[r - p + 1];
+        System.arraycopy(a, p, b, 0, b.length);
 
+        int low = q - p + 1;
         int i = 0;
-        int j = 0;
+        int j = low;
         int k = p;
 
         // While there are remaining elements in both arrays,
         // compare which element is lower and add it to the result
-        while (i < lo.length && j < hi.length) {
-            if (lo[i] < hi[j]) {
-                a[k++] = lo[i++];
+        while (i < low && j < b.length) {
+            if (b[i] < b[j]) {
+                a[k++] = b[i++];
             } else {
-                a[k++] = hi[j++];
+                a[k++] = b[j++];
             }
         }
         // Copy any remaining elements in either array to the result
-        while (i < lo.length) {
-            a[k++] = lo[i++];
+        while (i < low) {
+            a[k++] = b[i++];
         }
-        while (j < hi.length) {
-            a[k++] = hi[j++];
+        while (j < b.length) {
+            a[k++] = b[j++];
         }
 
     }
