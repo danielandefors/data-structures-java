@@ -4,11 +4,20 @@ import java.util.NoSuchElementException;
 
 /**
  * A stack of ints.
+ * Dynamically sized array storage.
+ * Push, pop, and peek run in (amortized) constant time.
  */
 public class IntStack {
 
+    /**
+     * Array that contains the elements in the stack.
+     * Will be grow or shrink as needed.
+     */
     private int[] elements;
 
+    /**
+     * The size of the stack. I.e., the number of elements currently in the stack.
+     */
     private int size;
 
     /**

@@ -5,12 +5,25 @@ import java.util.NoSuchElementException;
 
 /**
  * A queue of ints.
+ * Dynamically sized array storage.
+ * Enqueue and dequeue run in (amortized) constant time.
  */
 public class IntQueue {
 
+    /**
+     * Array that contains the elements in the queue.
+     * Will be grow or shrink as needed.
+     */
     private int[] elements;
 
+    /**
+     * The size of the queue. I.e., the number of elements currently in the queue.
+     */
     private int size;
+
+    /**
+     * Points to the first element in the queue. I.e., the next element that will be returned by dequeue.
+     */
     private int head;
 
     /**
@@ -71,7 +84,7 @@ public class IntQueue {
      */
     private static int minCapacity(int size) {
         int l = 2;
-        while (l <= size) {
+        while (l < size) {
             l <<= 1;
         }
         return l;
