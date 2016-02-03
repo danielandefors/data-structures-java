@@ -20,7 +20,10 @@ public class TwoSum {
         Arrays.sort(a); // O(n lg n)
         for (int i = 0; i < a.length; i++) {
             int x = a[i], s = t - x;
-            if (s >= x && Arrays.binarySearch(a, i + 1, a.length, s) > i) { // O(lg n)
+            if (s < x) {
+                return false;
+            }
+            if (Arrays.binarySearch(a, i + 1, a.length, s) > i) { // O(lg n)
                 return true;
             }
         }
