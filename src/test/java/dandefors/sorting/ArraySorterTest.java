@@ -20,9 +20,9 @@ public abstract class ArraySorterTest {
 
     private static IntTestData DATA_10K = new IntTestData("sort-10K.txt");
 
-    private static IntTestData DATA_100K = new IntTestData("sort-100K.txt");
+//    private static IntTestData DATA_100K = new IntTestData("sort-100K.txt");
 
-    private static IntTestData DATA_1M = new IntTestData("sort-1M.txt");
+//    private static IntTestData DATA_1M = new IntTestData("sort-1M.txt");
 
     @Test
     public void testSortSimple() {
@@ -50,31 +50,29 @@ public abstract class ArraySorterTest {
         testWithData(s, DATA_10K);
     }
 
-    @Test
-    @Ignore
-    public void testSort100K() throws IOException {
-        ArraySorter s = createSorter();
-        testWithData(s, DATA_100K);
-        // on my system:
-        // bubble sort ~ 20 seconds
-        // selection sort ~ 3 seconds
-        // insertion sort ~ 1 seconds
-        // merge sort ~ 0.02 seconds
-        // quick sort ~ 0.03 seconds
-    }
+//    @Test
+//    public void testSort100K() throws IOException {
+//        ArraySorter s = createSorter();
+//        testWithData(s, DATA_100K);
+//        // on my system:
+//        // bubble sort ~ 20 seconds
+//        // selection sort ~ 3 seconds
+//        // insertion sort ~ 1 seconds
+//        // merge sort ~ 0.02 seconds
+//        // quick sort ~ 0.03 seconds
+//    }
 
-    @Test
-    @Ignore
-    public void testSort1M() throws IOException {
-        ArraySorter s = createSorter();
-        testWithData(s, DATA_1M);
-        // on my system:
-        // bubble sort ~ 34 minutes
-        // selection sort ~ 6 minutes
-        // insertion sort ~ 2 minutes
-        // merge sort ~ 0.18 seconds
-        // quick sort ~ 0.14 seconds
-    }
+//    @Test
+//    public void testSort1M() throws IOException {
+//        ArraySorter s = createSorter();
+//        testWithData(s, DATA_1M);
+//        // on my system:
+//        // bubble sort ~ 34 minutes
+//        // selection sort ~ 6 minutes
+//        // insertion sort ~ 2 minutes
+//        // merge sort ~ 0.18 seconds
+//        // quick sort ~ 0.14 seconds
+//    }
 
     private static void testWithData(ArraySorter s, IntTestData data) {
         assertArrayEquals(data.getExpected(), s.sort(data.getData()));

@@ -1,4 +1,4 @@
-package dandefors.misc;
+package dandefors.miscellanea;
 
 /**
  * Algorithms to find maximum subarray.
