@@ -92,5 +92,25 @@ public interface Graph {
 
     }
 
+    /**
+     * Checks if the graph is acyclic. I.e., if it doesn't have any cycles.
+     *
+     * @return True if the graph is acyclic.
+     */
+    default boolean acyclic() {
+
+        int len = vertices();
+        CycleDetector c = new CycleDetector(len);
+        for (int i = 0; i < len; i++) {
+            if (c.visited(i)) continue;
+            dfs(i, c);
+            if (c.isCycleDetected()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
 }

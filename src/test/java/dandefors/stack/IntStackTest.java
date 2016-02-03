@@ -42,4 +42,9 @@ public class IntStackTest {
     public void testPopEmpty() {
         new IntStack().pop();
     }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testPeekEmpty() {
+        new IntStack().peek();
+    }
 }

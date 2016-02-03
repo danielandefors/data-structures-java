@@ -3,6 +3,8 @@ package dandefors.graph;
 import dandefors.queue.IntQueue;
 import dandefors.stack.IntStack;
 
+import java.util.Arrays;
+
 /**
  * Array-backed adjacency list.
  */
@@ -144,10 +146,13 @@ public class AdjacencyList implements Graph {
             return processor;
         }
 
-        //boolean[] processed = new boolean[edges.length];
-        boolean[] discovered = new boolean[edges.length];
-
+        int[] parent = new int[edges.length];
         EdgeNode[] search = new EdgeNode[edges.length];
+        boolean[] discovered = new boolean[edges.length];
+        boolean[] processed = new boolean[edges.length];
+
+        Arrays.fill(parent, -1);
+
 
         IntStack s = new IntStack();
         discovered[x] = true;
@@ -163,7 +168,7 @@ public class AdjacencyList implements Graph {
                 if (!processor.processVertexLate(x)) {
                     return processor;
                 }
-                //processed[x] = true;
+                processed[x] = true;
                 s.pop();
                 continue;
             }
@@ -172,7 +177,7 @@ public class AdjacencyList implements Graph {
 
             int y = edge.y;
 
-            if ((directed || !discovered[y] || x == y) && !processor.processEdge(x, y)) {
+            if ((directed || (parent[x] != y && !processed[y])) && !processor.processEdge(x, y)) {
                 return processor;
             }
 
@@ -182,6 +187,7 @@ public class AdjacencyList implements Graph {
                 }
                 discovered[y] = true;
                 search[y] = edges[y];
+                parent[y] = x;
                 s.push(y);
             }
 

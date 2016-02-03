@@ -3,7 +3,7 @@ package dandefors.graph;
 /**
  * A processor that remembers each vertex visited during a search.
  */
-public class VertexVisitor implements GraphSearchProcessor {
+class VertexVisitor implements GraphSearchProcessor {
 
     private final boolean[] s;
 

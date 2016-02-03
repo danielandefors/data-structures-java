@@ -283,6 +283,90 @@ public class AdjacencyListTest {
 
     }
 
+    @Test
+    public void testAcyclicUndirected() {
+
+        AdjacencyList g = AdjacencyList.createUndirected(10);
+        assertTrue(g.acyclic());
+
+        g.insert(4, 5);
+        assertTrue(g.acyclic());
+
+        g.insert(4, 6);
+        assertTrue(g.acyclic());
+
+        g.insert(7, 5);
+        assertTrue(g.acyclic());
+
+        g.insert(6, 7);
+        assertFalse(g.acyclic());
+
+        g.insert(2, 1);
+        assertFalse(g.acyclic());
+
+    }
+
+    @Test
+    public void testAcyclicDirected() {
+
+        AdjacencyList g = AdjacencyList.createDirected(10);
+        assertTrue(g.acyclic());
+
+        g.insert(4, 5);
+        assertTrue(g.acyclic());
+
+        g.insert(4, 6);
+        assertTrue(g.acyclic());
+
+        g.insert(7, 5);
+        assertTrue(g.acyclic());
+
+        g.insert(6, 7);
+        assertTrue(g.acyclic());
+
+        g.insert(2, 1);
+        assertTrue(g.acyclic());
+
+        g.insert(5, 4);
+        assertFalse(g.acyclic());
+
+    }
+
+    @Test
+    public void testCountEdgesInCyclesUndirected() {
+
+        AdjacencyList g = AdjacencyList.createUndirected(10);
+
+        g.insert(2, 1);
+        assertEquals(1, g.dfs(2, new EdgeCounter()).getEdges());
+
+        g.insert(3, 1);
+        assertEquals(2, g.dfs(2, new EdgeCounter()).getEdges());
+
+        g.insert(3, 2);
+        assertEquals(3, g.dfs(2, new EdgeCounter()).getEdges());
+
+    }
+
+    @Test
+    public void testCountEdgesInCyclesDirected() {
+
+        AdjacencyList g = AdjacencyList.createDirected(10);
+
+        g.insert(2, 1);
+        assertEquals(1, g.dfs(2, new EdgeCounter()).getEdges());
+
+        g.insert(3, 1);
+        assertEquals(1, g.dfs(2, new EdgeCounter()).getEdges());
+
+        g.insert(1, 3);
+        assertEquals(3, g.dfs(2, new EdgeCounter()).getEdges());
+
+        g.insert(3, 2);
+        assertEquals(4, g.dfs(2, new EdgeCounter()).getEdges());
+
+    }
+
     private static int[] array(int... a) {
         return a;
     }
