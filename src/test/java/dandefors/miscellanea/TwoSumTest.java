@@ -21,5 +21,6 @@ public class TwoSumTest {
         assertTrue(t.compute(array(9, 1, 4, 5, 8, 15), 10));
         assertTrue(t.compute(array(5, 1, 4, 5, 8, 15), 10));
         assertTrue(t.compute(array(-2, -7, 1, 99, -87, 22, 52, 119), 12));
+        assertFalse(t.compute(array(2, 2), 10));
     }
 }
