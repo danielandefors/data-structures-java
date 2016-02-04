@@ -37,7 +37,7 @@ class TopologicalSort extends EdgeClassificationProcessor {
 
     public int[] getTopologicalOrder() {
         if (cycle) {
-            throw new IllegalStateException("The graph is cyclic");
+            throw new IllegalStateException("Graph is cyclic");
         }
         return order.toArray();
     }

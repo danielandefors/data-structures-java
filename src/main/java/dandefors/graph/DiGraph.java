@@ -17,6 +17,7 @@ public interface DiGraph extends Graph {
      *
      * @param x The root vertex of the topological sort.
      * @return A topological order of the vertices reachable from `x`.
+     * @throws IllegalStateException If the graph has a cycle.
      */
     default int[] getTopologicalOrder(int x) {
         return dfs(x, new TopologicalSort(vertices())).getTopologicalOrder();
@@ -26,15 +27,15 @@ public interface DiGraph extends Graph {
      * Get a topological order of the graph.
      *
      * @return A topological order of the graph.
+     * @throws IllegalStateException If the graph has a cycle.
      */
     default int[] getTopologicalOrder() {
-        TopologicalSort s = new TopologicalSort(vertices());
-        for (int i = 0; i < vertices(); i++) {
+        int len = vertices();
+        TopologicalSort s = new TopologicalSort(len);
+        for (int i = 0; i < len; i++) {
             if (s.isDiscovered(i)) continue;
             dfs(i, s);
-            if (s.isCycleDetected()) {
-                throw new IllegalStateException("Graph is cyclic");
-            }
+            if (s.isCycleDetected()) break;
         }
         return s.getTopologicalOrder();
     }
