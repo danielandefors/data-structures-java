@@ -23,9 +23,11 @@ g.insert(4, 6);
 g.insert(5, 6);
 g.insert(6, 7);
 
+// Check if the graph has any cycles
+assertTrue(g.acyclic());
+
 // Get the topological order
 int[] order = g.getTopologicalOrder();
-
 assertArrayEquals(new int[] { 1, 2, 3, 4, 5, 6, 7, 0 }, order);
 
 ```
