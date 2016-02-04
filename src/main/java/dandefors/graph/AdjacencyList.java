@@ -8,17 +8,31 @@ import java.util.Arrays;
 /**
  * Array-backed adjacency list.
  */
-public class AdjacencyList implements DiGraph {
+public abstract class AdjacencyList implements Graph {
 
     private final boolean directed;
     private final EdgeNode[] edges;
     private final int[] degree;
     private int edgeCount;
 
-    public AdjacencyList(int vertices, boolean directed) {
+    private AdjacencyList(int vertices, boolean directed) {
         this.edges = new EdgeNode[vertices];
         this.degree = new int[vertices];
         this.directed = directed;
+    }
+
+    public static class Undirected extends AdjacencyList implements UnGraph {
+
+        public Undirected(int vertices) {
+            super(vertices, false);
+        }
+    }
+
+    public static class Directed extends AdjacencyList implements DiGraph {
+
+        public Directed(int vertices) {
+            super(vertices, true);
+        }
     }
 
     /**
@@ -27,8 +41,8 @@ public class AdjacencyList implements DiGraph {
      * @param vertices The number of vertices.
      * @return A new graph.
      */
-    public static AdjacencyList createUndirected(int vertices) {
-        return new AdjacencyList(vertices, false);
+    public static UnGraph createUnGraph(int vertices) {
+        return new Undirected(vertices);
     }
 
     /**
@@ -37,13 +51,8 @@ public class AdjacencyList implements DiGraph {
      * @param vertices The number of vertices.
      * @return A new graph.
      */
-    public static AdjacencyList createDirected(int vertices) {
-        return new AdjacencyList(vertices, true);
-    }
-
-    @Override
-    public boolean directed() {
-        return directed;
+    public static DiGraph createDiGraph(int vertices) {
+        return new Directed(vertices);
     }
 
     @Override

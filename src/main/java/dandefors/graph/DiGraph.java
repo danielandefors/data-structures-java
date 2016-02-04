@@ -12,9 +12,6 @@ public interface DiGraph extends Graph {
      * @return The topological order of the tree of x.
      */
     default int[] getTopologicalOrder(int x) {
-        if (!directed()) {
-            throw new UnsupportedOperationException("Only supported for directed graphs");
-        }
         return dfs(x, new TopologicalSort(vertices())).getTopologicalOrder();
     }
 
@@ -24,9 +21,6 @@ public interface DiGraph extends Graph {
      * @return The topological order of the graph.
      */
     default int[] getTopologicalOrder() {
-        if (!directed()) {
-            throw new UnsupportedOperationException("Only supported for directed graphs");
-        }
         TopologicalSort s = new TopologicalSort(vertices());
         for (int i = 0; i < vertices(); i++) {
             if (s.isDiscovered(i)) continue;
