@@ -13,19 +13,19 @@ public interface DiGraph extends Graph {
     DiGraph reversed();
 
     /**
-     * Get the topological sort of the tree of x.
+     * Get a topological order of the vertices that are reachable from `x`.
      *
      * @param x The root vertex of the topological sort.
-     * @return The topological order of the tree of x.
+     * @return A topological order of the vertices reachable from `x`.
      */
     default int[] getTopologicalOrder(int x) {
         return dfs(x, new TopologicalSort(vertices())).getTopologicalOrder();
     }
 
     /**
-     * Get the topological sort of the graph.
+     * Get a topological order of the graph.
      *
-     * @return The topological order of the graph.
+     * @return A topological order of the graph.
      */
     default int[] getTopologicalOrder() {
         TopologicalSort s = new TopologicalSort(vertices());
