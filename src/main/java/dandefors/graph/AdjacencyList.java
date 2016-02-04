@@ -8,7 +8,7 @@ import java.util.Arrays;
 /**
  * Array-backed adjacency list.
  */
-public class AdjacencyList implements Graph {
+public class AdjacencyList implements DiGraph {
 
     private final boolean directed;
     private final EdgeNode[] edges;

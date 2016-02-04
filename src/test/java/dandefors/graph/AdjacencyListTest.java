@@ -590,10 +590,15 @@ public class AdjacencyListTest {
         AdjacencyList.createUndirected(1).getTopologicalOrder(0);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testTopologicalOrderGraphUndirected() {
+        AdjacencyList.createUndirected(1).getTopologicalOrder();
+    }
+
     @Test
     public void testTopologicalOrderDirected() {
 
-        AdjacencyList g = AdjacencyList.createDirected(20);
+        AdjacencyList g = AdjacencyList.createDirected(10);
 
         g.insert(1, 2);
         g.insert(1, 5);
@@ -609,6 +614,9 @@ public class AdjacencyListTest {
         int[] order = g.getTopologicalOrder(1);
         assertArrayEquals(array(1, 2, 3, 4, 5, 6, 7), order);
 
+        int[] all = g.getTopologicalOrder();
+        assertArrayEquals(array(9, 8, 1, 2, 3, 4, 5, 6, 7, 0), all);
+
     }
 
     @Test(expected = IllegalStateException.class)
@@ -622,6 +630,20 @@ public class AdjacencyListTest {
         g.insert(3, 1);
 
         g.getTopologicalOrder(1);
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testTopologicalOrderWithCycleGraphDirected() {
+
+
+        AdjacencyList g = AdjacencyList.createDirected(20);
+
+        g.insert(1, 2);
+        g.insert(2, 3);
+        g.insert(3, 1);
+
+        g.getTopologicalOrder();
 
     }
 

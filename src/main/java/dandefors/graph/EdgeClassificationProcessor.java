@@ -55,7 +55,7 @@ public abstract class EdgeClassificationProcessor implements GraphSearchProcesso
     private EdgeType classifyEdge(int x, int y) {
         if (parent[y] == x) {
             return EdgeType.TREE;
-        } else if (exitTime[y] == -1) {
+        } else if (!isProcessed(y)) {
             return EdgeType.BACK;
         } else if (entryTime[y] > entryTime[x]) {
             return EdgeType.FORWARD;
@@ -78,6 +78,14 @@ public abstract class EdgeClassificationProcessor implements GraphSearchProcesso
 
     public boolean isRoot(int vertex) {
         return root == vertex;
+    }
+
+    public boolean isDiscovered(int vertex) {
+        return getEntryTime(vertex) != -1;
+    }
+
+    public boolean isProcessed(int vertex) {
+        return getExitTime(vertex) != -1;
     }
 
     public abstract boolean processEdge(int x, int y, EdgeType type);
