@@ -317,5 +317,34 @@ public abstract class DiGraphTest extends GraphTest {
         g.getTopologicalOrder();
     }
 
+    @Test
+    public void testReverseDirected() {
+        DiGraph g = createDiGraph(5);
+
+        g.insert(0, 2);
+        g.insert(1, 0);
+        g.insert(1, 2);
+        g.insert(1, 3);
+        g.insert(3, 2);
+        g.insert(3, 4);
+
+        assertArrayEquals(array(1, 3, 4, 0, 2), g.getTopologicalOrder());
+
+        DiGraph r = g.reversed();
+
+        assertEquals(g.vertices(), r.vertices());
+        assertEquals(g.edges(), r.edges());
+
+        assertTrue(r.connected(0, 1));
+        assertTrue(r.connected(2, 0));
+        assertTrue(r.connected(2, 1));
+        assertTrue(r.connected(2, 3));
+        assertTrue(r.connected(3, 1));
+        assertTrue(r.connected(4, 3));
+
+        assertArrayEquals(array(4, 2, 3, 0, 1), r.getTopologicalOrder());
+
+    }
+
 
 }

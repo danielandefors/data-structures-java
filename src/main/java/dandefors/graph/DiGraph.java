@@ -6,6 +6,13 @@ package dandefors.graph;
 public interface DiGraph extends Graph {
 
     /**
+     * Create a new graph that's identical to the current graph, except that all edges have been reversed.
+     *
+     * @return A new graph with reversed edges.
+     */
+    DiGraph reversed();
+
+    /**
      * Get the topological sort of the tree of x.
      *
      * @param x The root vertex of the topological sort.

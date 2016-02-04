@@ -10,10 +10,10 @@ import java.util.Arrays;
  */
 public abstract class AdjacencyList implements Graph {
 
-    private final boolean directed;
-    private final EdgeNode[] edges;
-    private final int[] degree;
-    private int edgeCount;
+    protected final boolean directed;
+    protected final EdgeNode[] edges;
+    protected final int[] degree;
+    protected int edgeCount;
 
     private AdjacencyList(int vertices, boolean directed) {
         this.edges = new EdgeNode[vertices];
@@ -64,6 +64,20 @@ public abstract class AdjacencyList implements Graph {
          */
         public Directed(int vertices) {
             super(vertices, true);
+        }
+
+        @Override
+        public DiGraph reversed() {
+            int len = vertices();
+            DiGraph r = new Directed(len);
+            for (int x = 0; x < len; x++) {
+                EdgeNode p = edges[x];
+                while (p != null) {
+                    r.insert(p.y, x);
+                    p = p.next;
+                }
+            }
+            return r;
         }
     }
 
