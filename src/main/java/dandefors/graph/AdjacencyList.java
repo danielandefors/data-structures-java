@@ -97,6 +97,10 @@ public class AdjacencyList implements Graph {
     @Override
     public <T extends GraphSearchProcessor> T bfs(int x, T processor) {
 
+        if (!processor.processStartVertex(x)) {
+            return processor;
+        }
+
         boolean[] processed = new boolean[edges.length];
         boolean[] discovered = new boolean[edges.length];
 
@@ -141,6 +145,10 @@ public class AdjacencyList implements Graph {
 
     @Override
     public <T extends GraphSearchProcessor> T dfs(int x, T processor) {
+
+        if (!processor.processStartVertex(x)) {
+            return processor;
+        }
 
         if (!processor.processVertexEarly(x)) {
             return processor;

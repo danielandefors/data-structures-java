@@ -112,5 +112,19 @@ public interface Graph {
         return true;
     }
 
+    /**
+     * Get all articulation vertices (a.k.a. cut nodes) in the graph, starting from the given vertex.
+     * Only supported for undirected graphs.
+     *
+     * @param x The start vertex.
+     * @return The articulation vertices.
+     */
+    default int[] getArticulationVertices(int x) {
+        if (directed()) {
+            throw new UnsupportedOperationException("Only supported for undirected graphs");
+        }
+        return dfs(x, new ArticulationVertexFinder(vertices())).getArticulationVertices();
+    }
+
 
 }
