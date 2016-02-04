@@ -39,14 +39,11 @@ public class IntTestData {
     }
 
     private void load() throws IOException {
-        long begin = System.nanoTime();
         try (InputStream in = forTest.getResourceAsStream(resource)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf8"));
             data = toInts(reader.readLine());
             expected = toInts(reader.readLine());
         }
-        long end = System.nanoTime();
-        System.err.printf("Loaded %s in %.1f%n", resource, (end - begin) / 1000000f);
     }
 
     private static int[] toInts(String s) {

@@ -1,5 +1,6 @@
 package dandefors.queue;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -167,6 +168,24 @@ public class IntQueue {
         }
         this.elements = x;
         this.head = 0;
+    }
+
+    /**
+     * Returns all elements in the queue.
+     * The next element to dequeue is the first element in the array.
+     *
+     * @return An array with all elements in the queue.
+     */
+    public int[] toArray() {
+        if (head + size < elements.length) {
+            return Arrays.copyOfRange(elements, head, head + size);
+        } else {
+            int[] x = new int[size];
+            int tail = elements.length - head;
+            System.arraycopy(elements, head, x, 0, tail);
+            System.arraycopy(elements, 0, x, size - tail, tail);
+            return x;
+        }
     }
 
 }

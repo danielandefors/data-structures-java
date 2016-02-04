@@ -16,7 +16,6 @@ class ArticulationVertexFinder extends EdgeClassificationProcessor {
         this.reachableAncestor = new int[vertices];
         this.treeOutDegree = new int[vertices];
         this.set = new BitSet(vertices);
-        System.out.println("///");
     }
 
     @Override
@@ -40,7 +39,7 @@ class ArticulationVertexFinder extends EdgeClassificationProcessor {
 
         if (isRoot(x)) {
             if (treeOutDegree[x] > 1) {
-                System.out.printf("root: %d\n", x);
+                // root articulation vertex
                 set.set(x);
             }
         } else {
@@ -48,14 +47,14 @@ class ArticulationVertexFinder extends EdgeClassificationProcessor {
             int p = getParent(x);
             if (!isRoot(p)) {
                 if (reachableAncestor[x] == getParent(x)) {
-                    System.out.printf("parent: %d\n", p);
+                    // parent articulation vertex
                     set.set(p);
                 }
                 if (reachableAncestor[x] == x) {
-                    System.out.printf("bridge: %d\n", p);
+                    // bridge articulation vertex
                     set.set(p);
                     if (treeOutDegree[x] > 0) {
-                        System.out.printf("bridge: %d\n", x);
+                        // bridge articulation vertex
                         set.set(x);
                     }
                 }

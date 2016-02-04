@@ -99,5 +99,20 @@ public class IntStack {
         this.elements = x;
     }
 
+    /**
+     * The elements on the stack.
+     * The top of the stack will be the first element in the returned array.
+     *
+     * @return The elements in the stack as an array.
+     */
+    public int[] toArray() {
+        int[] x = new int[size];
+        for (int i = 0, j = size - 1; i <= j; i++, j--) {
+            x[i] = elements[j];
+            x[j] = elements[i];
+        }
+        return x;
+    }
+
 
 }

@@ -155,6 +155,27 @@ public class IntQueueTest {
         new IntQueue().dequeue();
     }
 
+    @Test
+    public void testToArray() {
+
+        IntQueue q = new IntQueue();
+        q.enqueue(1);
+        q.enqueue(2);
+        q.enqueue(3);
+
+        assertArrayEquals(new int[]{1, 2, 3}, q.toArray());
+        assertEquals(1, q.dequeue());
+
+        q.enqueue(4);
+        q.enqueue(5);
+
+        assertEquals(2, q.dequeue());
+        assertEquals(3, q.dequeue());
+
+        assertArrayEquals(new int[]{4, 5}, q.toArray());
+
+    }
+
     private static List<Integer> toList(int... a) {
         List<Integer> list = new ArrayList<>(a.length);
         for (int element : a) {

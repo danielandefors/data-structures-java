@@ -545,18 +545,18 @@ public class AdjacencyListTest {
         g.insert(9, 11);
         g.insert(10, 11);
 
-        assertArrayEquals(array(1, 3, 4, 8),  g.getArticulationVertices(1));
+        assertArrayEquals(array(1, 3, 4, 8), g.getArticulationVertices(1));
 
 
-        assertArrayEquals(array(),  g.getArticulationVertices(20));
+        assertArrayEquals(array(), g.getArticulationVertices(20));
 
         g.insert(20, 21);
-        assertArrayEquals(array(),  g.getArticulationVertices(20));
+        assertArrayEquals(array(), g.getArticulationVertices(20));
 
         g.insert(21, 22);
-        assertArrayEquals(array(21),  g.getArticulationVertices(20));
-        assertArrayEquals(array(21),  g.getArticulationVertices(21));
-        assertArrayEquals(array(21),  g.getArticulationVertices(22));
+        assertArrayEquals(array(21), g.getArticulationVertices(20));
+        assertArrayEquals(array(21), g.getArticulationVertices(21));
+        assertArrayEquals(array(21), g.getArticulationVertices(22));
 
     }
 
@@ -582,6 +582,46 @@ public class AdjacencyListTest {
 //        g.insert(10, 11);
 
         g.getArticulationVertices(1);
+
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testTopologicalOrderUndirected() {
+        AdjacencyList.createUndirected(1).getTopologicalOrder(0);
+    }
+
+    @Test
+    public void testTopologicalOrderDirected() {
+
+        AdjacencyList g = AdjacencyList.createDirected(20);
+
+        g.insert(1, 2);
+        g.insert(1, 5);
+        g.insert(2, 3);
+        g.insert(2, 4);
+        g.insert(3, 4);
+        g.insert(3, 7);
+        g.insert(4, 5);
+        g.insert(4, 6);
+        g.insert(5, 6);
+        g.insert(6, 7);
+
+        int[] order = g.getTopologicalOrder(1);
+        assertArrayEquals(array(1, 2, 3, 4, 5, 6, 7), order);
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testTopologicalOrderWithCycleDirected() {
+
+
+        AdjacencyList g = AdjacencyList.createDirected(20);
+
+        g.insert(1, 2);
+        g.insert(2, 3);
+        g.insert(3, 1);
+
+        g.getTopologicalOrder(1);
 
     }
 

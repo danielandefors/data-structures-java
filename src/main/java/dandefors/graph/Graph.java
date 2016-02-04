@@ -126,5 +126,12 @@ public interface Graph {
         return dfs(x, new ArticulationVertexFinder(vertices())).getArticulationVertices();
     }
 
+    default int[] getTopologicalOrder(int x) {
+        if (!directed()) {
+            throw new UnsupportedOperationException("Only supported for directed graphs");
+        }
+        return dfs(x, new TopologicalSort(vertices())).getTopologicalOrder();
+    }
+
 
 }

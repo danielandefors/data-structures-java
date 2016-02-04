@@ -35,7 +35,6 @@ public class IntStackTest {
         assertEquals(0, s.size());
         assertTrue(s.isEmpty());
 
-
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -47,4 +46,17 @@ public class IntStackTest {
     public void testPeekEmpty() {
         new IntStack().peek();
     }
+
+    @Test
+    public void testToArray() {
+
+        IntStack s = new IntStack();
+        s.push(1);
+        s.push(2);
+        s.push(3);
+
+        assertArrayEquals(new int[]{3, 2, 1}, s.toArray());
+
+    }
+
 }
