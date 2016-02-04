@@ -112,7 +112,6 @@ public abstract class GraphTest {
     }
 
 
-
     @Test
     public void testConnectedComponentsUndirected() {
 
@@ -214,6 +213,7 @@ public abstract class GraphTest {
         assertEquals(3, g.dfs(2, new EdgeCounter()).getEdges());
 
     }
+
     @Test
     public void testTreeEdgeUndirected() {
 
@@ -254,6 +254,7 @@ public abstract class GraphTest {
 
 
     }
+
     @Test
     public void testArticulationVertexUndirected() {
 
@@ -290,6 +291,35 @@ public abstract class GraphTest {
 
     }
 
+    @Test
+    public void testBipartiteUndirected() {
+        UnGraph g = createGraph(10);
+        for (int x = 0; x < 5; x++) {
+            for (int y = 5; y < 10; y++) {
+                g.insert(x, y);
+            }
+        }
+        assertTrue(g.bipartite());
+    }
+
+    @Test
+    public void testBipartite2Undirected() {
+        UnGraph g = createGraph(10);
+        for (int i = 1; i < 10; i++) {
+            g.insert(i - 1, i);
+        }
+        assertTrue(g.bipartite());
+    }
+
+
+    @Test
+    public void testNotBipartiteUndirected() {
+        UnGraph g = createGraph(3);
+        g.insert(0, 1);
+        g.insert(1, 2);
+        g.insert(2, 0);
+        assertFalse(g.bipartite());
+    }
 
 
     public static int[] array(int... a) {

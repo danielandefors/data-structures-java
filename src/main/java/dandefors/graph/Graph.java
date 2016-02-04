@@ -82,5 +82,25 @@ public interface Graph {
         return true;
     }
 
+    /**
+     * Checks if the graph is bipartite. I.e., the vertices can be divided into two disjoint independent sets, such
+     * that every edge in the graph has one endpoint in each set. A bipartite graph can also be colored with only two
+     * colors.
+     *
+     * If the graph is disconnected, it returns true if each component of the graph is a bipartition.
+     *
+     * @return True if the graph is bipartite.
+     */
+    default boolean bipartite() {
+        int len = vertices();
+        TwoColorProcessor twoColor = new TwoColorProcessor(len);
+        for (int i = 0; i < len; i++) {
+            if (!twoColor.isBipartite()) break;
+            if (twoColor.getColor(i) != TwoColorProcessor.UNCOLORED) continue;
+            bfs(i, twoColor);
+        }
+        return twoColor.isBipartite();
+    }
+
 
 }
