@@ -21,20 +21,6 @@ public abstract class AdjacencyList implements Graph {
         this.directed = directed;
     }
 
-    public static class Undirected extends AdjacencyList implements UnGraph {
-
-        public Undirected(int vertices) {
-            super(vertices, false);
-        }
-    }
-
-    public static class Directed extends AdjacencyList implements DiGraph {
-
-        public Directed(int vertices) {
-            super(vertices, true);
-        }
-    }
-
     /**
      * Create an undirected adjacency list graph.
      *
@@ -46,6 +32,19 @@ public abstract class AdjacencyList implements Graph {
     }
 
     /**
+     * Undirected adjacency list graph.
+     */
+    public static class Undirected extends AdjacencyList implements UnGraph {
+
+        /**
+         * @param vertices The number of vertices in the graph.
+         */
+        public Undirected(int vertices) {
+            super(vertices, false);
+        }
+    }
+
+    /**
      * Create a directed adjacency list graph.
      *
      * @param vertices The number of vertices.
@@ -53,6 +52,19 @@ public abstract class AdjacencyList implements Graph {
      */
     public static DiGraph createDiGraph(int vertices) {
         return new Directed(vertices);
+    }
+
+    /**
+     * Directed adjacency list graph.
+     */
+    public static class Directed extends AdjacencyList implements DiGraph {
+
+        /**
+         * @param vertices The number of vertices in the graph.
+         */
+        public Directed(int vertices) {
+            super(vertices, true);
+        }
     }
 
     @Override
@@ -91,10 +103,13 @@ public abstract class AdjacencyList implements Graph {
         return false;
     }
 
+    /**
+     * An edge between to vertices.
+     */
     private static class EdgeNode {
 
-        private int y;
-        private EdgeNode next;
+        private final int y;
+        private final EdgeNode next;
 
         public EdgeNode(int y, EdgeNode next) {
             this.y = y;
