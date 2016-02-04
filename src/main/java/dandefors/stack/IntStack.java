@@ -83,6 +83,12 @@ public class IntStack {
         return element;
     }
 
+    /**
+     * Get the top element currently on the stack, without removing it.
+     *
+     * @return The next element.
+     * @throws NoSuchElementException If the stack is empty.
+     */
     public int peek() {
         if (size == 0) {
             throw new NoSuchElementException("peek on empty stack");
@@ -107,9 +113,8 @@ public class IntStack {
      */
     public int[] toArray() {
         int[] x = new int[size];
-        for (int i = 0, j = size - 1; i <= j; i++, j--) {
+        for (int i = 0, j = size - 1; i < size; i++, j--) {
             x[i] = elements[j];
-            x[j] = elements[i];
         }
         return x;
     }

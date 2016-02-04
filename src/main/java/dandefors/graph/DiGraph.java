@@ -1,7 +1,7 @@
 package dandefors.graph;
 
 /**
- *
+ * A directed graph.
  */
 public interface DiGraph extends Graph {
 
