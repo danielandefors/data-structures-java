@@ -38,6 +38,8 @@ public interface Graph {
      */
     void insert(int x, int y, int weight);
 
+    Iterable<Edge> edges(int x);
+
     /**
      * Check if there's an edge from x to y.
      *

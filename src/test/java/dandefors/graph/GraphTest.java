@@ -7,7 +7,9 @@ import dandefors.tuple.Tuple;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -59,6 +61,49 @@ public abstract class GraphTest {
 
     }
 
+    @Test
+    public void testEdgesUndirected() {
+
+        UnGraph g = createGraph(3);
+
+        g.insert(0, 2, 10);
+        g.insert(0, 1, 3);
+
+        Edge edge;
+        Iterator<Edge> itr;
+
+        itr = g.edges(0).iterator();
+
+        edge = itr.next();
+        assertEquals(1, edge.getY());
+        assertEquals(3, edge.getWeight());
+        assertTrue(itr.hasNext());
+
+        edge = itr.next();
+        assertEquals(2, edge.getY());
+        assertEquals(10, edge.getWeight());
+        assertFalse(itr.hasNext());
+
+        itr = g.edges(1).iterator();
+
+        edge = itr.next();
+        assertEquals(0, edge.getY());
+        assertEquals(3, edge.getWeight());
+        assertFalse(itr.hasNext());
+
+        itr = g.edges(2).iterator();
+
+        edge = itr.next();
+        assertEquals(0, edge.getY());
+        assertEquals(10, edge.getWeight());
+        assertFalse(itr.hasNext());
+
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testNextOnEmptyEdges() {
+        createGraph(3).edges(0).iterator().next();
+    }
 
     @Test
     public void testBfsUndirected() {

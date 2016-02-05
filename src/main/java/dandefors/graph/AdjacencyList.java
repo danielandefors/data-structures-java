@@ -7,6 +7,8 @@ import dandefors.stack.IntStack;
 import dandefors.tuple.Tuple;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Array-backed adjacency list.
@@ -181,6 +183,29 @@ public abstract class AdjacencyList implements Graph {
     }
 
     @Override
+    public Iterable<Edge> edges(int x) {
+        return () -> new Iterator<Edge>() {
+
+            private EdgeNode node = edges[x];
+
+            @Override
+            public boolean hasNext() {
+                return node != null;
+            }
+
+            @Override
+            public Edge next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("next on empty iterator");
+                }
+                Edge edge = node;
+                node = node.next;
+                return edge;
+            }
+        };
+    }
+
+    @Override
     public boolean connected(int x, int y) {
         EdgeNode n = edges[x];
         while (n != null) {
@@ -195,7 +220,7 @@ public abstract class AdjacencyList implements Graph {
     /**
      * An edge between to vertices.
      */
-    private static class EdgeNode {
+    private static class EdgeNode implements Edge {
 
         private final int y;
         private final int weight;
@@ -205,6 +230,16 @@ public abstract class AdjacencyList implements Graph {
             this.y = y;
             this.weight = weight;
             this.next = next;
+        }
+
+        @Override
+        public int getY() {
+            return y;
+        }
+
+        @Override
+        public int getWeight() {
+            return weight;
         }
     }
 
