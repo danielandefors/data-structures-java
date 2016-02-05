@@ -19,6 +19,7 @@ public abstract class DiGraphTest extends GraphTest {
 
         assertEquals(3, g.vertices());
         assertEquals(0, g.edges());
+        assertEquals(0, g.degree(0));
 
         assertFalse(g.connected(0, 1));
         assertFalse(g.connected(0, 2));
@@ -31,6 +32,9 @@ public abstract class DiGraphTest extends GraphTest {
 
         assertEquals(3, g.vertices());
         assertEquals(1, g.edges());
+        assertEquals(1, g.degree(0));
+        assertEquals(0, g.degree(1));
+        assertEquals(0, g.degree(2));
 
         assertFalse(g.connected(0, 1));
         assertTrue(g.connected(0, 2));
@@ -43,6 +47,9 @@ public abstract class DiGraphTest extends GraphTest {
 
         assertEquals(3, g.vertices());
         assertEquals(2, g.edges());
+        assertEquals(1, g.degree(0));
+        assertEquals(1, g.degree(1));
+        assertEquals(0, g.degree(2));
 
         assertFalse(g.connected(0, 1));
         assertTrue(g.connected(0, 2));

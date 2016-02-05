@@ -9,6 +9,14 @@ import dandefors.graph.processors.TopologicalOrder;
 public interface DiGraph extends Graph {
 
     /**
+     * Get the out degree of the vertex.
+     *
+     * @param x A vertex.
+     * @return The out degree of the vertex.
+     */
+    int degree(int x);
+
+    /**
      * Create a new graph that's identical to the current graph, except that all edges have been reversed.
      *
      * @return A new graph with reversed edges.

@@ -67,6 +67,11 @@ public abstract class AdjacencyList implements Graph {
         }
 
         @Override
+        public int degree(int x) {
+            return degree[x];
+        }
+
+        @Override
         public DiGraph reversed() {
             int len = vertices();
             DiGraph r = new Directed(len);
