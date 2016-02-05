@@ -1,5 +1,7 @@
 package dandefors.graph;
 
+import dandefors.graph.processors.EdgeClassifier;
+import dandefors.graph.processors.EdgeType;
 import dandefors.tuple.IntTuple;
 import org.junit.Test;
 
@@ -516,7 +518,7 @@ public abstract class GraphTest {
         }
     }
 
-    public static final class EdgeTypes extends EdgeClassificationProcessor {
+    public static final class EdgeTypes extends EdgeClassifier {
 
         private final Map<IntTuple, EdgeType> types = new HashMap<>();
 
@@ -536,7 +538,7 @@ public abstract class GraphTest {
 
     }
 
-    public static final class VertexTimes extends EdgeClassificationProcessor {
+    public static final class VertexTimes extends EdgeClassifier {
 
         public VertexTimes(int vertices) {
             super(vertices);

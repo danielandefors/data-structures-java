@@ -1,5 +1,6 @@
 package dandefors.graph;
 
+import dandefors.graph.processors.EdgeType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

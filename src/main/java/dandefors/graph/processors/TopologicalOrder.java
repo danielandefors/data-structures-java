@@ -1,16 +1,16 @@
-package dandefors.graph;
+package dandefors.graph.processors;
 
 import dandefors.stack.IntStack;
 
 /**
- *
+ * Creates a topological ordering of vertices in a graph (DFS).
  */
-class TopologicalSort extends EdgeClassificationProcessor {
+public class TopologicalOrder extends EdgeClassifier {
 
     private boolean cycle;
     private IntStack order = new IntStack();
 
-    public TopologicalSort(int vertices) {
+    public TopologicalOrder(int vertices) {
         super(vertices);
     }
 
@@ -29,10 +29,6 @@ class TopologicalSort extends EdgeClassificationProcessor {
             order.push(x);
         }
         return super.processVertexLate(x);
-    }
-
-    public boolean isCycleDetected() {
-        return cycle;
     }
 
     public int[] getTopologicalOrder() {

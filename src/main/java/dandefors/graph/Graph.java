@@ -1,5 +1,9 @@
 package dandefors.graph;
 
+import dandefors.graph.processors.CycleDetector;
+import dandefors.graph.processors.ShortestPathFinder;
+import dandefors.graph.processors.TwoColorer;
+
 /**
  * A graph.
  */
@@ -75,7 +79,7 @@ public interface Graph {
      * @return The shortest unweighted path from x to y.
      */
     default int[] getShortestUnweightedPath(int x, int y) {
-        return bfs(x, new PathFinder(y, vertices())).getPath();
+        return bfs(x, new ShortestPathFinder(y, vertices())).getPath();
     }
 
     /**
@@ -97,7 +101,7 @@ public interface Graph {
      * @return True if the graph is bipartite.
      */
     default boolean bipartite() {
-        return bfs(new TwoColorProcessor(vertices())).bipartite();
+        return bfs(new TwoColorer(vertices())).bipartite();
     }
 
 }

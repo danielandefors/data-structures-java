@@ -1,10 +1,12 @@
-package dandefors.graph;
+package dandefors.graph.processors;
+
+import dandefors.graph.GraphSearchProcessor;
 
 /**
- * A graph search processor that attempts to color the graph using only two colors (black and white).
+ * Attempts to color the graph using only two colors (black and white).
  * If the coloring was successful the {@link #bipartite()} method returns true.
  */
-class TwoColorProcessor implements GraphSearchProcessor {
+public class TwoColorer implements GraphSearchProcessor {
 
     public static final byte UNCOLORED = 0;
     public static final byte WHITE = 1;
@@ -17,7 +19,7 @@ class TwoColorProcessor implements GraphSearchProcessor {
     /**
      * @param vertices The number of vertices in the graph.
      */
-    public TwoColorProcessor(int vertices) {
+    public TwoColorer(int vertices) {
         this.color = new byte[vertices];
         bipartite = true;
     }

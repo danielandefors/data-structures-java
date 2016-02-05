@@ -1,5 +1,8 @@
 package dandefors.graph;
 
+import dandefors.graph.processors.ArticulationVertexFinder;
+import dandefors.graph.processors.WeakComponentFinder;
+
 /**
  * An undirected graph.
  */
@@ -11,19 +14,7 @@ public interface UnGraph extends Graph {
      * @return The number of connected components.
      */
     default int getConnectedComponents() {
-
-        int cc = 0;
-        int len = vertices();
-        VertexVisitor v = new VertexVisitor(len);
-
-        for (int i = 0; i < len; i++) {
-            if (v.visited(i)) continue;
-            bfs(i, v);
-            cc++;
-        }
-
-        return cc;
-
+        return bfs(new WeakComponentFinder()).getComponents();
     }
 
     /**

@@ -1,12 +1,12 @@
-package dandefors.graph;
+package dandefors.graph.processors;
 
 
 import dandefors.stack.IntStack;
 
 /**
- * A processor that finds strongly connected components (SCCs) during a DFS.
+ * Finds strongly connected components (DFS).
  */
-class StronglyConnectedComponentsProcessor extends EdgeClassificationProcessor {
+public class StrongComponentFinder extends EdgeClassifier {
 
     private int components;
     private final int[] low;
@@ -14,7 +14,7 @@ class StronglyConnectedComponentsProcessor extends EdgeClassificationProcessor {
 
     private final IntStack stack = new IntStack();
 
-    public StronglyConnectedComponentsProcessor(int vertices) {
+    public StrongComponentFinder(int vertices) {
         super(vertices);
         low = new int[vertices];
         scc = new int[vertices];

@@ -6,6 +6,12 @@ package dandefors.graph;
  */
 public interface GraphSearchProcessor {
 
+    /**
+     * Called when the graph search algorithm starts a search from a given vertex.
+     *
+     * @param x The start vertex.
+     * @return True to continue the search.
+     */
     default boolean processStartVertex(int x) {
         return true;
     }

@@ -1,13 +1,15 @@
-package dandefors.graph;
+package dandefors.graph.processors;
+
+import dandefors.graph.GraphSearchProcessor;
 
 /**
- * Processor used to detect if a graph contains a cycle.
+ * Detects cycles in graphs.
  */
-class CycleDetector implements GraphSearchProcessor {
+public class CycleDetector implements GraphSearchProcessor {
 
-    private static final byte UNVISITED = 0;
-    private static final byte VISITED = 1;
-    private static final byte STACKED = 2;
+    public static final byte UNVISITED = 0;
+    public static final byte VISITED = 1;
+    public static final byte STACKED = 2;
 
     private boolean cycle;
     private final byte[] stack;

@@ -1,11 +1,11 @@
-package dandefors.graph;
+package dandefors.graph.processors;
 
 import java.util.BitSet;
 
 /**
- * Graph search processor which finds all articulation vertices when used with DFS.
+ * Finds all articulation vertices (DFS).
  */
-class ArticulationVertexFinder extends EdgeClassificationProcessor {
+public class ArticulationVertexFinder extends EdgeClassifier {
 
     private final int[] reachableAncestor;
     private final int[] treeOutDegree;

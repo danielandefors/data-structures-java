@@ -1,11 +1,13 @@
-package dandefors.graph;
+package dandefors.graph.processors;
+
+import dandefors.graph.GraphSearchProcessor;
 
 import java.util.Arrays;
 
 /**
- * Graph search processor which classifies edges as either back, forward, tree, or cross edges.
+ * Classifies edges as either: back, forward, tree, or cross edges.
  */
-public abstract class EdgeClassificationProcessor implements GraphSearchProcessor {
+public abstract class EdgeClassifier implements GraphSearchProcessor {
 
     private int time;
     private int root;
@@ -13,7 +15,7 @@ public abstract class EdgeClassificationProcessor implements GraphSearchProcesso
     private final int[] entryTime;
     private final int[] exitTime;
 
-    public EdgeClassificationProcessor(int vertices) {
+    public EdgeClassifier(int vertices) {
         parent = new int[vertices];
         entryTime = new int[vertices];
         exitTime = new int[vertices];

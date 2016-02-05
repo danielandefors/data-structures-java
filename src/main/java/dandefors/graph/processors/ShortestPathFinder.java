@@ -1,18 +1,19 @@
-package dandefors.graph;
+package dandefors.graph.processors;
+
+import dandefors.graph.GraphSearchProcessor;
 
 import java.util.Arrays;
 
 /**
- * A search processor that stops the search as soon as it has found a path to the target vertex. Use this in
- * combination with a breadth-first search to find the shortest unweighted path between two vertices.
+ * Finds shortest path (BFS).
  */
-class PathFinder implements GraphSearchProcessor {
+public class ShortestPathFinder implements GraphSearchProcessor {
 
     private final int target;
     private final int[] parent;
     private final int[] depth;
 
-    public PathFinder(int target, int vertices) {
+    public ShortestPathFinder(int target, int vertices) {
         this.target = target;
         this.depth = new int[vertices];
         Arrays.fill(depth, -1);

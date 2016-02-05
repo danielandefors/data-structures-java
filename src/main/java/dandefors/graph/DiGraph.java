@@ -1,5 +1,8 @@
 package dandefors.graph;
 
+import dandefors.graph.processors.StrongComponentFinder;
+import dandefors.graph.processors.TopologicalOrder;
+
 /**
  * A directed graph.
  */
@@ -20,7 +23,7 @@ public interface DiGraph extends Graph {
      * @throws IllegalStateException If the graph has a cycle.
      */
     default int[] getTopologicalOrder(int x) {
-        return dfs(x, new TopologicalSort(vertices())).getTopologicalOrder();
+        return dfs(x, new TopologicalOrder(vertices())).getTopologicalOrder();
     }
 
     /**
@@ -30,11 +33,11 @@ public interface DiGraph extends Graph {
      * @throws IllegalStateException If the graph has a cycle.
      */
     default int[] getTopologicalOrder() {
-        return dfs(new TopologicalSort(vertices())).getTopologicalOrder();
+        return dfs(new TopologicalOrder(vertices())).getTopologicalOrder();
     }
 
     default int getStronglyConnectedComponents() {
-        return dfs(new StronglyConnectedComponentsProcessor(vertices())).getComponents();
+        return dfs(new StrongComponentFinder(vertices())).getComponents();
     }
 
 }
