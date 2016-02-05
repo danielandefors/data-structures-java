@@ -2,6 +2,7 @@ package dandefors.graph;
 
 import dandefors.graph.processors.ArticulationVertexFinder;
 import dandefors.graph.processors.WeakComponentFinder;
+import dandefors.tuple.Tuple;
 
 /**
  * An undirected graph.
@@ -27,4 +28,14 @@ public interface UnGraph extends Graph {
     default int[] getArticulationVertices(int x) {
         return dfs(x, new ArticulationVertexFinder(vertices())).getArticulationVertices();
     }
+
+    /**
+     * Compute the minimum spanning tree of the graph.
+     * It creates a new graph that only contains the edges of the minimum spanning tree.
+     * It also returns the total weight cost of the MST.
+     *
+     * @return The minimum spanning tree and the total weight cost.
+     * @throws IllegalStateException If the graph is disconnected.
+     */
+    Tuple<UnGraph, Integer> getMinimumSpanningTree();
 }

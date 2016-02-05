@@ -3,6 +3,7 @@ package dandefors.graph;
 import dandefors.graph.processors.EdgeClassifier;
 import dandefors.graph.processors.EdgeType;
 import dandefors.tuple.IntTuple;
+import dandefors.tuple.Tuple;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -321,6 +322,44 @@ public abstract class GraphTest {
         g.insert(1, 2);
         g.insert(2, 0);
         assertFalse(g.bipartite());
+    }
+
+
+    @Test
+    public void testMinimumSpanningTreeUndirected() {
+        UnGraph g = createGraph(5);
+        g.insert(1, 0, 5);
+        g.insert(1, 2, 4);
+        g.insert(1, 3, 3);
+        g.insert(2, 4, 2);
+        g.insert(3, 0, 2);
+        g.insert(3, 2, 1);
+        g.insert(3, 4, 9);
+
+        Tuple<UnGraph, Integer> t = g.getMinimumSpanningTree();
+        UnGraph mst = t.getFirst();
+
+        assertTrue(mst.connected(1, 3));
+        assertTrue(mst.connected(3, 0));
+        assertTrue(mst.connected(3, 2));
+        assertTrue(mst.connected(2, 4));
+
+        assertEquals(8, t.getSecond().intValue());
+
+    }
+
+
+    @Test(expected = IllegalStateException.class)
+    public void testMinimumSpanningTreeDisconnectedUndirected() {
+        UnGraph g = createGraph(5);
+        g.insert(1, 0, 5);
+        g.insert(1, 2, 4);
+        g.insert(1, 3, 3);
+        g.insert(3, 0, 2);
+        g.insert(3, 2, 1);
+
+        g.getMinimumSpanningTree();
+
     }
 
 

@@ -1,7 +1,10 @@
 package dandefors.graph;
 
+import dandefors.heap.ArrayHeap;
+import dandefors.heap.Heap;
 import dandefors.queue.IntQueue;
 import dandefors.stack.IntStack;
+import dandefors.tuple.Tuple;
 
 import java.util.Arrays;
 
@@ -42,6 +45,72 @@ public abstract class AdjacencyList implements Graph {
         public Undirected(int vertices) {
             super(vertices, false);
         }
+
+        @Override
+        public Tuple<UnGraph, Integer> getMinimumSpanningTree() {
+
+            // Temporary representation of an edge for the heap
+            class MSTEdge implements Comparable<MSTEdge> {
+
+                private final int x;
+                private final int y;
+                private final int w;
+
+                public MSTEdge(int x, int y, int w) {
+                    this.x = x;
+                    this.y = y;
+                    this.w = w;
+                }
+
+                @Override
+                public int compareTo(MSTEdge o) {
+                    return w - o.w;
+                }
+            }
+
+            // Prim's MST algorithm with a heap
+
+            UnGraph tree = new Undirected(edges.length);
+            boolean[] set = new boolean[edges.length];
+            Heap<MSTEdge> h = ArrayHeap.createMinHeap();
+
+            int x = 0;
+            int cost = 0;
+            int target = edges.length - 1;
+
+            while (tree.edges() < target) {
+
+                set[x] = true;
+
+                // Add all edges from `x` to unvisited `y` to the heap
+                EdgeNode p = edges[x];
+                while (p != null) {
+                    if (!set[p.y]) {
+                        h.insert(new MSTEdge(x, p.y, p.weight));
+                    }
+                    p = p.next;
+                }
+
+                // Get the next edge to an unvisited vertex
+                MSTEdge m;
+                do {
+                    if (h.isEmpty()) {
+                        throw new IllegalStateException("Graph is disconnected");
+                    }
+                    m = h.remove();
+                } while (set[m.y]);
+
+                // Insert the edge into the MST
+                tree.insert(m.x, m.y, m.w);
+                cost += m.w;
+                x = m.y;
+
+            }
+
+            return new Tuple<>(tree, cost);
+
+        }
+
     }
 
     /**
@@ -84,6 +153,7 @@ public abstract class AdjacencyList implements Graph {
             }
             return r;
         }
+
     }
 
     @Override
@@ -97,16 +167,16 @@ public abstract class AdjacencyList implements Graph {
     }
 
     @Override
-    public void insert(int x, int y) {
-        insertEdge(x, y);
+    public void insert(int x, int y, int weight) {
+        insertEdge(x, y, weight);
         if (!directed && x != y) {
-            insertEdge(y, x);
+            insertEdge(y, x, weight);
         }
         edgeCount++;
     }
 
-    private void insertEdge(int x, int y) {
-        edges[x] = new EdgeNode(y, edges[x]);
+    private void insertEdge(int x, int y, int weight) {
+        edges[x] = new EdgeNode(y, weight, edges[x]);
         degree[x]++;
     }
 
@@ -128,13 +198,14 @@ public abstract class AdjacencyList implements Graph {
     private static class EdgeNode {
 
         private final int y;
+        private final int weight;
         private final EdgeNode next;
 
-        public EdgeNode(int y, EdgeNode next) {
+        public EdgeNode(int y, int weight, EdgeNode next) {
             this.y = y;
+            this.weight = weight;
             this.next = next;
         }
-
     }
 
     /**
@@ -306,4 +377,5 @@ public abstract class AdjacencyList implements Graph {
         return true;
 
     }
+
 }

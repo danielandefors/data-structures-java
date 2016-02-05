@@ -20,12 +20,23 @@ public interface Graph {
     int edges();
 
     /**
-     * Insert an edge from x to y.
+     * Insert an edge with zero weight from x to y.
      *
      * @param x The source vertex.
      * @param y The target vertex.
      */
-    void insert(int x, int y);
+    default void insert(int x, int y) {
+        insert(x, y, 0);
+    }
+
+    /**
+     * Insert an edge from x to y.
+     *
+     * @param x      The source vertex.
+     * @param y      The target vertex.
+     * @param weight The edge weight.
+     */
+    void insert(int x, int y, int weight);
 
     /**
      * Check if there's an edge from x to y.
