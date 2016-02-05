@@ -44,6 +44,11 @@ public interface DiGraph extends Graph {
         return dfs(new TopologicalOrder(vertices())).getTopologicalOrder();
     }
 
+    /**
+     * Compute the strongly connected components of the graph.
+     *
+     * @return The number of strongly connected components.
+     */
     default int getStronglyConnectedComponents() {
         return dfs(new StrongComponentFinder(vertices())).getComponents();
     }
