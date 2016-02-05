@@ -1,19 +1,20 @@
 package dandefors.heap;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 /**
- * A binary heap.
+ * A binary heap. A.k.a., priority queue.
  *
  * @param <K> The value type.
  */
-public abstract class ArrayHeap<K extends Comparable<K>> implements Heap<K> {
+public abstract class ArrayHeap<K> implements Heap<K> {
 
     private int size;
 
     @SuppressWarnings("unchecked")
-    private K[] elements = (K[]) new Comparable[2];
+    private K[] elements = (K[]) new Object[2];
 
     /**
      * Create a min heap. I.e., {@link #remove()} removes the minimum element.
@@ -25,12 +26,32 @@ public abstract class ArrayHeap<K extends Comparable<K>> implements Heap<K> {
     }
 
     /**
+     * Create a min heap. I.e., {@link #remove()} removes the minimum element.
+     *
+     * @param comparator Used to compare if one value is less than another.
+     * @return A min heap.
+     */
+    public static <K> ArrayHeap<K> createMinHeap(Comparator<K> comparator) {
+        return new MinC<>(comparator);
+    }
+
+    /**
      * Create a max heap. I.e., {@link #remove()} removes the maximum element.
      *
      * @return A max heap.
      */
     public static <K extends Comparable<K>> ArrayHeap<K> createMaxHeap() {
         return new Max<>();
+    }
+
+    /**
+     * Create a max heap. I.e., {@link #remove()} removes the maximum element.
+     *
+     * @param comparator Used to compare if one value is greater than another.
+     * @return A max heap.
+     */
+    public static <K> ArrayHeap<K> createMaxHeap(Comparator<K> comparator) {
+        return new MaxC<>(comparator);
     }
 
     /**
@@ -45,6 +66,23 @@ public abstract class ArrayHeap<K extends Comparable<K>> implements Heap<K> {
     }
 
     /**
+     * Min heap with comparator.
+     */
+    public static class MinC<K> extends ArrayHeap<K> {
+
+        private Comparator<K> comparator;
+
+        public MinC(Comparator<K> c) {
+            comparator = c;
+        }
+
+        @Override
+        protected boolean ordered(K i, K j) {
+            return comparator.compare(i, j) <= 0;
+        }
+    }
+
+    /**
      * Max heap.
      */
     public static class Max<K extends Comparable<K>> extends ArrayHeap<K> {
@@ -52,6 +90,23 @@ public abstract class ArrayHeap<K extends Comparable<K>> implements Heap<K> {
         @Override
         protected boolean ordered(K i, K j) {
             return i.compareTo(j) >= 0;
+        }
+    }
+
+    /**
+     * Max heap with comparator.
+     */
+    public static class MaxC<K> extends ArrayHeap<K> {
+
+        private Comparator<K> comparator;
+
+        public MaxC(Comparator<K> c) {
+            comparator = c;
+        }
+
+        @Override
+        protected boolean ordered(K i, K j) {
+            return comparator.compare(i, j) >= 0;
         }
     }
 

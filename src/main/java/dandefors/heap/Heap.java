@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 /**
  * A binary heap.
  */
-public interface Heap<K extends Comparable<K>> {
+public interface Heap<K> {
 
     /**
      * Insert an element into the heap.

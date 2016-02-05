@@ -6,8 +6,10 @@ import java.util.NoSuchElementException;
 /**
  * A binary heap of ints.
  * Elements are stored as integer primitives.
+ * Does not implement the {@link Heap} interface to avoid accidental boxing/unboxing.
+ * Use {@link ArrayHeap} if you need a heap of {@link Integer}.
  */
-public abstract class IntHeap implements Heap<Integer> {
+public abstract class IntHeap {
 
     private int size;
     private int[] elements = new int[2];
@@ -52,11 +54,6 @@ public abstract class IntHeap implements Heap<Integer> {
         }
     }
 
-    @Override
-    public void insert(Integer element) {
-        insert(element.intValue());
-    }
-
     /**
      * Insert an element into the heap.
      *
@@ -68,11 +65,6 @@ public abstract class IntHeap implements Heap<Integer> {
         }
         elements[++size] = element;
         swim(size);
-    }
-
-    @Override
-    public Integer remove() {
-        return extract();
     }
 
     /**
@@ -124,12 +116,10 @@ public abstract class IntHeap implements Heap<Integer> {
         }
     }
 
-    @Override
     public int size() {
         return size;
     }
 
-    @Override
     public boolean isEmpty() {
         return size == 0;
     }

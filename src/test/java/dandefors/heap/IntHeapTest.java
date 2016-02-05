@@ -101,19 +101,4 @@ public class IntHeapTest {
         IntHeap.createMaxHeap().extract();
     }
 
-    @Test
-    public void testWithBoxing() {
-        IntHeap h = IntHeap.createMinHeap();
-        h.insert(5);
-        h.insert(Integer.valueOf(1));
-        h.insert(Integer.valueOf(3));
-        h.insert(9);
-        h.insert(Integer.valueOf(100));
-        assertEquals(1, h.remove().intValue());
-        assertEquals(Integer.valueOf(3), h.remove());
-        assertEquals(5, h.remove().intValue());
-        assertEquals(9, h.remove().intValue());
-        assertEquals(100, h.remove().intValue());
-    }
-
 }
