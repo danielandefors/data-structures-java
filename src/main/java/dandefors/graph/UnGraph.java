@@ -9,6 +9,12 @@ import dandefors.tuple.Tuple;
  */
 public interface UnGraph extends Graph {
 
+    @Override
+    default double density() {
+        double v = vertices(), e = edges();
+        return (e * 2) / (v * (v - 1));
+    }
+
     /**
      * Get the number of connected components in an undirected graph.
      *

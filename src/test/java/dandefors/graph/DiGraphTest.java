@@ -61,6 +61,25 @@ public abstract class DiGraphTest extends GraphTest {
     }
 
     @Test
+    public void testDensityDirected() {
+
+        DiGraph g = createDiGraph(4);
+
+        assertEquals(0, g.density(), 0);
+
+        g.insert(0, 1);
+        g.insert(1, 2);
+        g.insert(2, 3);
+        assertEquals(0.25, g.density(), 0);
+
+        g.insert(0, 2);
+        g.insert(0, 3);
+        g.insert(1, 3);
+        assertEquals(0.5, g.density(), 0);
+
+    }
+
+    @Test
     public void testBfsDirected() {
 
         DiGraph g = createDiGraph(10);

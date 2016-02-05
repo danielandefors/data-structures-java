@@ -100,6 +100,25 @@ public abstract class GraphTest {
 
     }
 
+    @Test
+    public void testDensityUndirected() {
+
+        UnGraph g = createGraph(4);
+
+        assertEquals(0, g.density(), 0);
+
+        g.insert(0, 1);
+        g.insert(1, 2);
+        g.insert(2, 3);
+        assertEquals(0.5, g.density(), 0);
+
+        g.insert(0, 2);
+        g.insert(0, 3);
+        g.insert(1, 3);
+        assertEquals(1, g.density(), 0);
+
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testNextOnEmptyEdges() {
         createGraph(3).edges(0).iterator().next();

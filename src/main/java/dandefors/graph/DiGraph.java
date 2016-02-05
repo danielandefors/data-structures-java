@@ -8,6 +8,12 @@ import dandefors.graph.processors.TopologicalOrder;
  */
 public interface DiGraph extends Graph {
 
+    @Override
+    default double density() {
+        double v = vertices(), e = edges();
+        return e / (v * (v - 1));
+    }
+
     /**
      * Get the out degree of the vertex.
      *

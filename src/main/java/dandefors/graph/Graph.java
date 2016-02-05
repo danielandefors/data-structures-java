@@ -19,6 +19,8 @@ public interface Graph {
      */
     int edges();
 
+    double density();
+
     /**
      * Insert an edge with zero weight from x to y.
      *
