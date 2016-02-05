@@ -25,9 +25,7 @@ public class TopologicalOrder extends EdgeClassifier {
 
     @Override
     public boolean processVertexLate(int x) {
-        if (!isProcessed(x)) {
-            order.push(x);
-        }
+        order.push(x);
         return super.processVertexLate(x);
     }
 
