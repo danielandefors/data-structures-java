@@ -20,7 +20,7 @@ public interface Heap<K> {
      * @return The element at the top of the heap.
      * @throws NoSuchElementException If the heap is empty.
      */
-    K remove();
+    K extract();
 
     /**
      * Get the size of the heap.

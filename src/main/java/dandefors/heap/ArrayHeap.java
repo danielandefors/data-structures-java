@@ -120,9 +120,9 @@ public abstract class ArrayHeap<K> implements Heap<K> {
     }
 
     @Override
-    public K remove() {
+    public K extract() {
         if (isEmpty()) {
-            throw new NoSuchElementException("remove on empty heap");
+            throw new NoSuchElementException("extract on empty heap");
         }
         K element = elements[1];
         elements[1] = elements[size];

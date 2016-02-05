@@ -99,7 +99,7 @@ public abstract class AdjacencyList implements Graph {
                     if (h.isEmpty()) {
                         throw new IllegalStateException("Graph is disconnected");
                     }
-                    m = h.remove();
+                    m = h.extract();
                 } while (set[m.y]);
 
                 // Insert the edge into the MST

@@ -32,15 +32,15 @@ public class ArrayHeapTest {
         assertEquals(9, h.size());
         assertFalse(h.isEmpty());
 
-        assertEquals("BERT", h.remove());
-        assertEquals("BIG BIRD", h.remove());
-        assertEquals("COOKIE MONSTER", h.remove());
-        assertEquals("COUNT VON COUNT", h.remove());
-        assertEquals("ELMO", h.remove());
-        assertEquals("ERNIE", h.remove());
-        assertEquals("GROVER", h.remove());
-        assertEquals("KERMIT THE FROG", h.remove());
-        assertEquals("OSCAR THE GROUCH", h.remove());
+        assertEquals("BERT", h.extract());
+        assertEquals("BIG BIRD", h.extract());
+        assertEquals("COOKIE MONSTER", h.extract());
+        assertEquals("COUNT VON COUNT", h.extract());
+        assertEquals("ELMO", h.extract());
+        assertEquals("ERNIE", h.extract());
+        assertEquals("GROVER", h.extract());
+        assertEquals("KERMIT THE FROG", h.extract());
+        assertEquals("OSCAR THE GROUCH", h.extract());
 
         assertEquals(0, h.size());
         assertTrue(h.isEmpty());
@@ -68,15 +68,15 @@ public class ArrayHeapTest {
         assertEquals(9, h.size());
         assertFalse(h.isEmpty());
 
-        assertEquals("OSCAR THE GROUCH", h.remove());
-        assertEquals("KERMIT THE FROG", h.remove());
-        assertEquals("GROVER", h.remove());
-        assertEquals("ERNIE", h.remove());
-        assertEquals("ELMO", h.remove());
-        assertEquals("COUNT VON COUNT", h.remove());
-        assertEquals("COOKIE MONSTER", h.remove());
-        assertEquals("BIG BIRD", h.remove());
-        assertEquals("BERT", h.remove());
+        assertEquals("OSCAR THE GROUCH", h.extract());
+        assertEquals("KERMIT THE FROG", h.extract());
+        assertEquals("GROVER", h.extract());
+        assertEquals("ERNIE", h.extract());
+        assertEquals("ELMO", h.extract());
+        assertEquals("COUNT VON COUNT", h.extract());
+        assertEquals("COOKIE MONSTER", h.extract());
+        assertEquals("BIG BIRD", h.extract());
+        assertEquals("BERT", h.extract());
 
         assertEquals(0, h.size());
         assertTrue(h.isEmpty());
@@ -107,18 +107,18 @@ public class ArrayHeapTest {
         assertEquals(12, h.size());
         assertFalse(h.isEmpty());
 
-        assertEquals(4, h.remove().value);
-        assertEquals(5, h.remove().value);
-        assertEquals(6, h.remove().value);
-        assertEquals(13, h.remove().value);
-        assertEquals(19, h.remove().value);
-        assertEquals(22, h.remove().value);
-        assertEquals(64, h.remove().value);
-        assertEquals(74, h.remove().value);
-        assertEquals(88, h.remove().value);
-        assertEquals(162, h.remove().value);
-        assertEquals(653, h.remove().value);
-        assertEquals(672, h.remove().value);
+        assertEquals(4, h.extract().value);
+        assertEquals(5, h.extract().value);
+        assertEquals(6, h.extract().value);
+        assertEquals(13, h.extract().value);
+        assertEquals(19, h.extract().value);
+        assertEquals(22, h.extract().value);
+        assertEquals(64, h.extract().value);
+        assertEquals(74, h.extract().value);
+        assertEquals(88, h.extract().value);
+        assertEquals(162, h.extract().value);
+        assertEquals(653, h.extract().value);
+        assertEquals(672, h.extract().value);
 
         assertEquals(0, h.size());
         assertTrue(h.isEmpty());
@@ -149,18 +149,18 @@ public class ArrayHeapTest {
         assertEquals(12, h.size());
         assertFalse(h.isEmpty());
 
-        assertEquals(672, h.remove().value);
-        assertEquals(653, h.remove().value);
-        assertEquals(162, h.remove().value);
-        assertEquals(88, h.remove().value);
-        assertEquals(74, h.remove().value);
-        assertEquals(64, h.remove().value);
-        assertEquals(22, h.remove().value);
-        assertEquals(19, h.remove().value);
-        assertEquals(13, h.remove().value);
-        assertEquals(6, h.remove().value);
-        assertEquals(5, h.remove().value);
-        assertEquals(4, h.remove().value);
+        assertEquals(672, h.extract().value);
+        assertEquals(653, h.extract().value);
+        assertEquals(162, h.extract().value);
+        assertEquals(88, h.extract().value);
+        assertEquals(74, h.extract().value);
+        assertEquals(64, h.extract().value);
+        assertEquals(22, h.extract().value);
+        assertEquals(19, h.extract().value);
+        assertEquals(13, h.extract().value);
+        assertEquals(6, h.extract().value);
+        assertEquals(5, h.extract().value);
+        assertEquals(4, h.extract().value);
 
         assertEquals(0, h.size());
         assertTrue(h.isEmpty());
@@ -169,7 +169,7 @@ public class ArrayHeapTest {
 
     @Test(expected = NoSuchElementException.class)
     public void extractOnEmptyHeap() {
-        ArrayHeap.<String>createMaxHeap().remove();
+        ArrayHeap.<String>createMaxHeap().extract();
     }
 
 
