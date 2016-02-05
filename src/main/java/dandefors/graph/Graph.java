@@ -33,7 +33,15 @@ public interface Graph {
     boolean connected(int x, int y);
 
     /**
-     * Breadth-first search.
+     * Run a breadth-first search over all vertices in the graph.
+     *
+     * @param p Processes vertexes and edges found in the search.
+     * @return The processor
+     */
+    <T extends GraphSearchProcessor> T bfs(T p);
+
+    /**
+     * Run a breadth-first search from the given vertex.
      *
      * @param x The start vertex.
      * @param p Processes vertexes and edges found in the search.
@@ -42,7 +50,15 @@ public interface Graph {
     <T extends GraphSearchProcessor> T bfs(int x, T p);
 
     /**
-     * Depth-first search.
+     * Run a depth-first search over all vertices in the graph.
+     *
+     * @param p Processes vertexes and edges found in the search.
+     * @return The processor
+     */
+    <T extends GraphSearchProcessor> T dfs(T p);
+
+    /**
+     * Run a depth-first search from the given vertex.
      *
      * @param x The start vertex.
      * @param p Processes vertexes and edges found in the search.
@@ -68,39 +84,20 @@ public interface Graph {
      * @return True if the graph is acyclic.
      */
     default boolean acyclic() {
-
-        int len = vertices();
-        CycleDetector c = new CycleDetector(len);
-        for (int i = 0; i < len; i++) {
-            if (c.visited(i)) continue;
-            dfs(i, c);
-            if (c.isCycleDetected()) {
-                return false;
-            }
-        }
-
-        return true;
+        return dfs(new CycleDetector(vertices())).acyclic();
     }
 
     /**
      * Checks if the graph is bipartite. I.e., the vertices can be divided into two disjoint independent sets, such
      * that every edge in the graph has one endpoint in each set. A bipartite graph can also be colored with only two
      * colors.
-     *
+     * <p>
      * If the graph is disconnected, it returns true if each component of the graph is a bipartition.
      *
      * @return True if the graph is bipartite.
      */
     default boolean bipartite() {
-        int len = vertices();
-        TwoColorProcessor twoColor = new TwoColorProcessor(len);
-        for (int i = 0; i < len; i++) {
-            if (!twoColor.isBipartite()) break;
-            if (twoColor.getColor(i) != TwoColorProcessor.UNCOLORED) continue;
-            bfs(i, twoColor);
-        }
-        return twoColor.isBipartite();
+        return bfs(new TwoColorProcessor(vertices())).bipartite();
     }
-
 
 }

@@ -132,18 +132,54 @@ public abstract class AdjacencyList implements Graph {
 
     }
 
-    @Override
-    public <T extends GraphSearchProcessor> T bfs(int x, T processor) {
+    /**
+     * Keeps track of which vertices have been discovered and
+     * processed during a graph search operation.
+     */
+    private static class SearchState {
 
-        if (!processor.processStartVertex(x)) {
-            return processor;
+        private final boolean[] processed;
+        private final boolean[] discovered;
+
+        public SearchState(int vertices) {
+            processed = new boolean[vertices];
+            discovered = new boolean[vertices];
         }
 
-        boolean[] processed = new boolean[edges.length];
-        boolean[] discovered = new boolean[edges.length];
+    }
+
+    @Override
+    public <T extends GraphSearchProcessor> T bfs(T processor) {
+        SearchState s = new SearchState(edges.length);
+        for (int i = 0; i < edges.length; i++) {
+            if (s.processed[i]) continue;
+            if (!bfs(s, i, processor)) break;
+        }
+        return processor;
+    }
+
+    @Override
+    public <T extends GraphSearchProcessor> T bfs(int x, T processor) {
+        bfs(new SearchState(edges.length), x, processor);
+        return processor;
+    }
+
+    /**
+     * Run a breadth-first search from the given vertex.
+     *
+     * @param s         The overall search state.
+     * @param x         The start vertex.
+     * @param processor The search processor.
+     * @return True if the search may continue. False if the processor aborted the search.
+     */
+    private boolean bfs(SearchState s, int x, GraphSearchProcessor processor) {
+
+        if (!processor.processStartVertex(x)) {
+            return false;
+        }
 
         IntQueue q = new IntQueue();
-        discovered[x] = true;
+        s.discovered[x] = true;
         q.enqueue(x);
 
         while (!q.isEmpty()) {
@@ -151,71 +187,94 @@ public abstract class AdjacencyList implements Graph {
             x = q.dequeue();
 
             if (!processor.processVertexEarly(x)) {
-                return processor;
+                return false;
             }
 
-            processed[x] = true;
+            s.processed[x] = true;
 
             EdgeNode edge = edges[x];
             while (edge != null) {
                 int y = edge.y;
 
-                if ((directed || !processed[y] || x == y) && !processor.processEdge(x, y)) {
-                    return processor;
+                if ((directed || !s.processed[y] || x == y) && !processor.processEdge(x, y)) {
+                    return false;
                 }
 
-                if (!discovered[y]) {
+                if (!s.discovered[y]) {
                     q.enqueue(y);
-                    discovered[y] = true;
+                    s.discovered[y] = true;
                 }
 
                 edge = edge.next;
             }
 
             if (!processor.processVertexLate(x)) {
-                return processor;
+                return false;
             }
 
         }
-        return processor;
 
+        return true;
+
+    }
+
+
+    @Override
+    public <T extends GraphSearchProcessor> T dfs(T processor) {
+        SearchState s = new SearchState(edges.length);
+        for (int i = 0; i < edges.length; i++) {
+            if (s.processed[i]) continue;
+            if (!dfs(s, i, processor)) break;
+        }
+        return processor;
     }
 
     @Override
     public <T extends GraphSearchProcessor> T dfs(int x, T processor) {
+        dfs(new SearchState(edges.length), x, processor);
+        return processor;
+    }
+
+    /**
+     * Run a depth-first search from the given vertex.
+     *
+     * @param s         The overall search state.
+     * @param x         The start vertex.
+     * @param processor The search processor.
+     * @return True if the search may continue. False if the processor aborted the search.
+     */
+    private boolean dfs(SearchState s, int x, GraphSearchProcessor processor) {
 
         if (!processor.processStartVertex(x)) {
-            return processor;
+            return false;
         }
 
         if (!processor.processVertexEarly(x)) {
-            return processor;
+            return false;
         }
 
         int[] parent = new int[edges.length];
         EdgeNode[] search = new EdgeNode[edges.length];
-        boolean[] discovered = new boolean[edges.length];
-        boolean[] processed = new boolean[edges.length];
 
         Arrays.fill(parent, -1);
 
 
-        IntStack s = new IntStack();
-        discovered[x] = true;
+        IntStack stack = new IntStack();
+        s.discovered[x] = true;
         search[x] = edges[x];
-        s.push(x);
+        stack.push(x);
 
-        while (!s.isEmpty()) {
+        while (!stack.isEmpty()) {
 
-            x = s.peek();
+            x = stack.peek();
 
             EdgeNode edge = search[x];
             if (edge == null) {
                 if (!processor.processVertexLate(x)) {
-                    return processor;
+                    return false;
                 }
-                processed[x] = true;
-                s.pop();
+                s.processed[x] = true;
+                stack.pop();
                 continue;
             }
 
@@ -223,22 +282,23 @@ public abstract class AdjacencyList implements Graph {
 
             int y = edge.y;
 
-            if ((directed || (parent[x] != y && !processed[y])) && !processor.processEdge(x, y)) {
-                return processor;
+            if ((directed || (parent[x] != y && !s.processed[y])) && !processor.processEdge(x, y)) {
+                return false;
             }
 
-            if (!discovered[y]) {
+            if (!s.discovered[y]) {
                 if (!processor.processVertexEarly(y)) {
-                    return processor;
+                    return false;
                 }
-                discovered[y] = true;
+                s.discovered[y] = true;
                 search[y] = edges[y];
                 parent[y] = x;
-                s.push(y);
+                stack.push(y);
             }
 
         }
-        return processor;
+
+        return true;
 
     }
 }

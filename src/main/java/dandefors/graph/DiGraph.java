@@ -30,14 +30,11 @@ public interface DiGraph extends Graph {
      * @throws IllegalStateException If the graph has a cycle.
      */
     default int[] getTopologicalOrder() {
-        int len = vertices();
-        TopologicalSort s = new TopologicalSort(len);
-        for (int i = 0; i < len; i++) {
-            if (s.isDiscovered(i)) continue;
-            dfs(i, s);
-            if (s.isCycleDetected()) break;
-        }
-        return s.getTopologicalOrder();
+        return dfs(new TopologicalSort(vertices())).getTopologicalOrder();
+    }
+
+    default int getStronglyConnectedComponents() {
+        return dfs(new StronglyConnectedComponentsProcessor(vertices())).getComponents();
     }
 
 }

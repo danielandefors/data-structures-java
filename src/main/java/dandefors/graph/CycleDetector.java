@@ -38,12 +38,8 @@ class CycleDetector implements GraphSearchProcessor {
         return true;
     }
 
-    public boolean visited(int x) {
-        return stack[x] != UNVISITED;
-    }
-
-    public boolean isCycleDetected() {
-        return cycle;
+    public boolean acyclic() {
+        return !cycle;
     }
 
 

@@ -346,5 +346,39 @@ public abstract class DiGraphTest extends GraphTest {
 
     }
 
+    @Test
+    public void testStronglyConnectedComponentsDirected() {
+        DiGraph g = createDiGraph(8);
+        g.insert(0, 1);
+        g.insert(1, 2);
+        g.insert(1, 3);
+        g.insert(1, 4);
+        g.insert(2, 1);
+        g.insert(3, 0);
+        g.insert(3, 5);
+        g.insert(3, 7);
+        g.insert(4, 5);
+        g.insert(5, 6);
+        g.insert(6, 4);
+        g.insert(7, 5);
+        assertEquals(3, g.getStronglyConnectedComponents());
+    }
+
+    @Test
+    public void testStronglyConnectedComponents2Directed() {
+        DiGraph g = createDiGraph(4);
+        assertEquals(4, g.getStronglyConnectedComponents());
+        g.insert(1, 2);
+        assertEquals(4, g.getStronglyConnectedComponents());
+        g.insert(3, 1);
+        assertEquals(4, g.getStronglyConnectedComponents());
+        g.insert(2, 3);
+        assertEquals(2, g.getStronglyConnectedComponents());
+        g.insert(0, 1);
+        assertEquals(2, g.getStronglyConnectedComponents());
+        g.insert(2, 0);
+        assertEquals(1, g.getStronglyConnectedComponents());
+    }
+
 
 }

@@ -2,9 +2,9 @@ package dandefors.graph;
 
 /**
  * A graph search processor that attempts to color the graph using only two colors (black and white).
- * If the coloring was successful the {@link #isBipartite()} method returns true.
+ * If the coloring was successful the {@link #bipartite()} method returns true.
  */
-public class TwoColorProcessor implements GraphSearchProcessor {
+class TwoColorProcessor implements GraphSearchProcessor {
 
     public static final byte UNCOLORED = 0;
     public static final byte WHITE = 1;
@@ -56,7 +56,7 @@ public class TwoColorProcessor implements GraphSearchProcessor {
      *
      * @return True if bipartite.
      */
-    public boolean isBipartite() {
+    public boolean bipartite() {
         return bipartite;
     }
 
