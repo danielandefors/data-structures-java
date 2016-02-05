@@ -38,6 +38,12 @@ public interface Graph {
      */
     void insert(int x, int y, int weight);
 
+    /**
+     * Get all edges from the vertex `x`.
+     *
+     * @param x A vertex.
+     * @return All edges from this vertex.
+     */
     Iterable<Edge> edges(int x);
 
     /**
