@@ -76,11 +76,11 @@ public interface Graph {
     /**
      * Run a breadth-first search from the given vertex.
      *
-     * @param x The start vertex.
+     * @param s The start vertex.
      * @param p Processes vertexes and edges found in the search.
      * @return The processor
      */
-    <T extends GraphSearchProcessor> T bfs(int x, T p);
+    <T extends GraphSearchProcessor> T bfs(int s, T p);
 
     /**
      * Run a depth-first search over all vertices in the graph.
@@ -93,11 +93,11 @@ public interface Graph {
     /**
      * Run a depth-first search from the given vertex.
      *
-     * @param x The start vertex.
+     * @param s The start vertex.
      * @param p Processes vertexes and edges found in the search.
      * @return The processor
      */
-    <T extends GraphSearchProcessor> T dfs(int x, T p);
+    <T extends GraphSearchProcessor> T dfs(int s, T p);
 
     /**
      * Get the shortest unweighted path between x and y. A.k.a., the minimum-link path.
