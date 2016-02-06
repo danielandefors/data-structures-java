@@ -1,6 +1,5 @@
-package dandefors.graph.processors;
+package dandefors.graph.search;
 
-import dandefors.graph.processors.EdgeType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;

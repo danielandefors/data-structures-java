@@ -1,8 +1,7 @@
-package dandefors.graph.processors;
+package dandefors.graph.search;
 
 import dandefors.graph.AdjacencyList;
 import dandefors.graph.DiGraph;
-import dandefors.graph.processors.TwoColorer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

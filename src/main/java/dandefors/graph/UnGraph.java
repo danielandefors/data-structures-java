@@ -1,7 +1,7 @@
 package dandefors.graph;
 
-import dandefors.graph.processors.ArticulationVertexFinder;
-import dandefors.graph.processors.WeakComponentFinder;
+import dandefors.graph.search.ArticulationVertexFinder;
+import dandefors.graph.search.WeakComponentFinder;
 import dandefors.tuple.Tuple;
 
 /**

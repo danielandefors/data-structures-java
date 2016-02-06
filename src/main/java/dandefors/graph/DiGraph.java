@@ -1,7 +1,7 @@
 package dandefors.graph;
 
-import dandefors.graph.processors.StrongComponentFinder;
-import dandefors.graph.processors.TopologicalOrder;
+import dandefors.graph.search.StrongComponentFinder;
+import dandefors.graph.search.TopologicalOrder;
 
 /**
  * A directed graph.

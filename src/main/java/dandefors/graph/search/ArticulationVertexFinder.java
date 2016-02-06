@@ -1,4 +1,4 @@
-package dandefors.graph.processors;
+package dandefors.graph.search;
 
 import java.util.BitSet;
 

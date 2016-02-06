@@ -1,7 +1,7 @@
 package dandefors.graph;
 
-import dandefors.graph.processors.EdgeClassifier;
-import dandefors.graph.processors.EdgeType;
+import dandefors.graph.search.EdgeClassifier;
+import dandefors.graph.search.EdgeType;
 import dandefors.tuple.IntTuple;
 import dandefors.tuple.Tuple;
 import org.junit.Test;

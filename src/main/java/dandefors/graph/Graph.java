@@ -1,8 +1,8 @@
 package dandefors.graph;
 
-import dandefors.graph.processors.CycleDetector;
-import dandefors.graph.processors.ShortestPathFinder;
-import dandefors.graph.processors.TwoColorer;
+import dandefors.graph.search.CycleDetector;
+import dandefors.graph.search.ShortestPathFinder;
+import dandefors.graph.search.TwoColorer;
 
 /**
  * A graph.
@@ -19,7 +19,6 @@ public interface Graph {
      */
     int edges();
 
-    double density();
 
     /**
      * Insert an edge with zero weight from x to y.
