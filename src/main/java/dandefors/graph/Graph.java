@@ -3,6 +3,8 @@ package dandefors.graph;
 import dandefors.graph.search.CycleDetector;
 import dandefors.graph.search.ShortestPathFinder;
 import dandefors.graph.search.TwoColorer;
+import dandefors.heap.ArrayHeap;
+import dandefors.heap.Heap;
 
 /**
  * A graph.
@@ -19,6 +21,13 @@ public interface Graph {
      */
     int edges();
 
+    /**
+     * Get the graph's density as the ratio between the number of edges in the graph and the maximum number of edges.
+     * If the graph is complex, e.g., it contains self-loops or multi-edges, the density could be > 1.
+     *
+     * @return The graph's density.
+     */
+    double density();
 
     /**
      * Insert an edge with zero weight from x to y.
@@ -91,15 +100,15 @@ public interface Graph {
     <T extends GraphSearchProcessor> T dfs(int x, T p);
 
     /**
-     * Get the shortest unweighted path between x and y. Returns an empty array if no path exists. If x and y are
-     * identical it returns an array with a single element.
+     * Get the shortest unweighted path between x and y. A.k.a., the minimum-link path.
+     * Returns an empty array if no path exists. If x and y are identical it returns an array with a single element.
      *
-     * @param x The start vertex.
-     * @param y The end vertex.
+     * @param s The start vertex.
+     * @param t The target vertex.
      * @return The shortest unweighted path from x to y.
      */
-    default int[] getShortestUnweightedPath(int x, int y) {
-        return bfs(x, new ShortestPathFinder(y, vertices())).getPath();
+    default int[] getShortestUnweightedPath(int s, int t) {
+        return bfs(s, new ShortestPathFinder(t, vertices())).getPath();
     }
 
     /**
@@ -122,6 +131,86 @@ public interface Graph {
      */
     default boolean bipartite() {
         return bfs(new TwoColorer(vertices())).bipartite();
+    }
+
+
+    /**
+     * Get the shortest weighted path from `s` to `t`.
+     * The algorithm only works with non-negative edge weights.
+     *
+     * @param s The start vertex.
+     * @param t The target vertex.
+     * @return The shortest weighted path.
+     * @throws IllegalStateException If no path exists between `s` and `t`.
+     */
+    default Path getShortestWeightedPath(int s, int t) {
+
+        // Represents the shortest path from `s` to `y`
+        class SPNode implements Comparable<SPNode> {
+
+            private int x;
+            private int y;
+            private int weight;
+            private int length;
+
+            public SPNode(int x, int y, int weight, int length) {
+                this.x = x;
+                this.y = y;
+                this.weight = weight;
+                this.length = length;
+            }
+
+            @Override
+            public int compareTo(SPNode o) {
+                return weight - o.weight;
+            }
+        }
+
+        // Dijkstra
+
+        int vertices = vertices();
+        Heap<SPNode> h = ArrayHeap.createMinHeap();
+        int[] parent = new int[vertices];
+        boolean[] seen = new boolean[vertices];
+
+        int last = s;
+        int weight = 0;
+        int length = 1;
+        parent[last] = last;
+
+        while (last != t) {
+
+            seen[last] = true;
+            for (Edge edge : edges(last)) {
+                if (seen[edge.getY()]) continue;
+                h.insert(new SPNode(last, edge.getY(), edge.getWeight() + weight, length + 1));
+            }
+
+            SPNode node;
+            do {
+                if (h.isEmpty()) {
+                    throw new IllegalStateException(String.format("There's no path from %d to %d", s, t));
+                }
+                node = h.extract();
+            } while (seen[node.y]);
+
+            last = node.y;
+            weight = node.weight;
+            length = node.length;
+            parent[last] = node.x;
+
+        }
+
+        int[] path = new int[length];
+        int w = t;
+        for (int i = length - 1; i >= 0; i--) {
+            path[i] = w;
+            w = parent[w];
+        }
+
+
+        return new Path(weight, path);
+
     }
 
 }

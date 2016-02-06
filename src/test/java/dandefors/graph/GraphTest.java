@@ -426,6 +426,56 @@ public abstract class GraphTest {
 
     }
 
+    @Test
+    public void testShortestWeightedPathUndirected() {
+        UnGraph g = createGraph(8);
+
+        Path p = g.getShortestWeightedPath(0, 0);
+        assertArrayEquals(array(0), p.getVertices());
+        assertEquals(0, p.getWeight());
+
+        g.insert(0, 1, 5);
+        g.insert(0, 2, 1);
+        g.insert(2, 1, 2);
+        g.insert(1, 3, 4);
+        g.insert(3, 4, 3);
+        g.insert(2, 5, 12);
+        g.insert(4, 5, 1);
+        g.insert(4, 6, 5);
+        g.insert(4, 7, 10);
+        g.insert(5, 6, 3);
+        g.insert(6, 7, 2);
+
+        p = g.getShortestWeightedPath(0, 7);
+        assertArrayEquals(array(0, 2, 1, 3, 4, 5, 6, 7), p.getVertices());
+        assertEquals(16, p.getWeight());
+
+        g.insert(2, 7, 14);
+        p = g.getShortestWeightedPath(0, 7);
+        assertArrayEquals(array(0, 2, 7), p.getVertices());
+        assertEquals(15, p.getWeight());
+
+        g.insert(0, 5, 9);
+        p = g.getShortestWeightedPath(0, 7);
+        assertArrayEquals(array(0, 5, 6, 7), p.getVertices());
+        assertEquals(14, p.getWeight());
+
+        g.insert(3, 7, 1);
+        p = g.getShortestWeightedPath(0, 7);
+        assertArrayEquals(array(0, 2, 1, 3, 7), p.getVertices());
+        assertEquals(8, p.getWeight());
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testShortestWeightedPathDisconnectedUndirected() {
+        UnGraph g = createGraph(8);
+        g.insert(0, 6, 5);
+        g.insert(0, 3, 1);
+        g.insert(5, 3, 2);
+        g.getShortestWeightedPath(0, 7);
+    }
+
 
     public static int[] array(int... a) {
         return a;
