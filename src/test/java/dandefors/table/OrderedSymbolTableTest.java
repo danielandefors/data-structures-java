@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public abstract class OrderedSymbolTableTest extends SymbolTableTest {
 
     @Override
-    public abstract OrderedSymbolTable<String, String> createTable();
+    protected abstract OrderedSymbolTable<String, String> createTable();
 
     @Test
     public void testMin() {

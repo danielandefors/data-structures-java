@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  */
 public abstract class SymbolTableTest {
 
-    public abstract SymbolTable<String, String> createTable();
+    protected abstract SymbolTable<String, String> createTable();
 
     @Test
     public void testEmptyTable() {
@@ -196,6 +196,11 @@ public abstract class SymbolTableTest {
         assertFalse(t.contains("N"));
         assertIterableHasItems(t.keys());
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteNull() {
+        createTable().delete(null);
     }
 
     static void assertIterableHasItems(Iterable<String> c, String... values) {
