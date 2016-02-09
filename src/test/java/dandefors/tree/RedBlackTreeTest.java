@@ -8,8 +8,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * Tests for red-black trees.
@@ -43,6 +42,19 @@ public class RedBlackTreeTest
     @FunctionalInterface
     interface InvariantTest {
         void test(RedBlackTreeNode<?, ?> node);
+    }
+
+    /**
+     * Validate that the tree responds correctly to put and delete operations.
+     *
+     * @param tester The invariant tester.
+     * @param s      The input array.
+     */
+    private void validateTree(InvariantTest tester, String[] s) {
+        validatePut(tester, s);
+        validateDeleteMin(tester, s);
+        validateDeleteMax(tester, s);
+        validateDelete(tester, s);
     }
 
     /**
@@ -125,16 +137,14 @@ public class RedBlackTreeTest
             indices = ArrayPermutations.of(order);
         } else {
             List<Integer[]> l = new ArrayList<>();
-//            int step = s.length / 4;
-//            for (int i = 0; i < step; i++) {
-//                Integer[] ix = new Integer[4];
-//                for (int j = 0; j < ix.length; j++) {
-//                    ix[j] = (step * j + i) % s.length;
-//                }
-//                l.add(ix);
-//            }
+            int ops = 4;
+            int step = s.length / ops;
             for (int i = 0; i < s.length; i++) {
-                l.add(new Integer[]{i});
+                Integer[] ix = new Integer[ops];
+                for (int j = 0; j < ix.length; j++) {
+                    ix[j] = (step * j + i) % s.length;
+                }
+                l.add(ix);
             }
             indices = l;
         }
@@ -214,25 +224,13 @@ public class RedBlackTreeTest
         Then again, if we do that we might miss bug because of a side effect that we didn't consider.
          */
 
-        for (String[] input : TreeTestData.TREES) {
-            validatePut(tester, input);
-            validateDeleteMin(tester, input);
-            validateDeleteMax(tester, input);
-            validateDelete(tester, input);
+        for (String[] input : TREES) {
+            validateTree(tester, input);
         }
 
-//        String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-//        validatePut(tester, abc);
-//        validateDeleteMin(tester, abc);
-//        validateDeleteMax(tester, abc);
-//        validateDelete(tester, abc);
-//
-//        Set<String> allSet = new HashSet<>(ALL);
-//        String[] all = allSet.toArray(new String[allSet.size()]);
-//        validatePut(tester, all);
-//        validateDeleteMin(tester, all);
-//        validateDeleteMax(tester, all);
-//        validateDelete(tester, all);
+        validateTree(tester, LOREM);
+        validateTree(tester, GETTY);
+        validateTree(tester, CONST);
 
     }
 

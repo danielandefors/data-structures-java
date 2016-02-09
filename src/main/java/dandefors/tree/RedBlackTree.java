@@ -1,8 +1,5 @@
 package dandefors.tree;
 
-import dandefors.stack.Stack;
-import dandefors.stack.Stacks;
-
 /**
  * An ordered symbol table implemented as a red-black tree.
  */
@@ -11,36 +8,6 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V,
     @Override
     protected RedBlackTreeNode<K, V> createNode(K key, V value) {
         return new RedBlackTreeNode<>(key, value);
-    }
-
-    /**
-     * Rotate the tree left at `h`.
-     *
-     * @param h A node.
-     * @return The rotated node that replaces `h`.
-     */
-    private RedBlackTreeNode<K, V> rotateLeft(RedBlackTreeNode<K, V> h) {
-        RedBlackTreeNode<K, V> x = h.right;
-        h.right = x.left;
-        x.left = h;
-        x.size = h.size;
-        h.size = 1 + size(h.left) + size(h.right);
-        return x;
-    }
-
-    /**
-     * Rotate the tree right at `h`.
-     *
-     * @param h A node.
-     * @return The rotated node that replaces `h`.
-     */
-    private RedBlackTreeNode<K, V> rotateRight(RedBlackTreeNode<K, V> h) {
-        RedBlackTreeNode<K, V> x = h.left;
-        h.left = x.right;
-        x.right = h;
-        x.size = h.size;
-        h.size = 1 + size(h.left) + size(h.right);
-        return x;
     }
 
     /**
@@ -82,23 +49,21 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V,
      * @return The same node or a replacement.
      */
     private RedBlackTreeNode<K, V> restore(RedBlackTreeNode<K, V> node) {
-        if (node != null) {
-            if (isRed(node.right) && !isRed(node.left)) {
-                // Rotate to fix right-leaning red node
-                swapColors(node, node.right);
-                node = rotateLeft(node);
-            }
-            if (isRed(node.left) && isRed(node.left.left)) {
-                // Rotate to fix two red nodes in a row
-                swapColors(node, node.left);
-                node = rotateRight(node);
-            }
-            if (isRed(node.left) && isRed(node.right)) {
-                // Restore a temporary 4-node
-                node.color = RedBlackTreeNode.RED;
-                node.left.color = RedBlackTreeNode.BLACK;
-                node.right.color = RedBlackTreeNode.BLACK;
-            }
+        if (isRed(node.right) && !isRed(node.left)) {
+            // Rotate to fix right-leaning red node
+            swapColors(node, node.right);
+            node = rotateLeft(node);
+        }
+        if (isRed(node.left) && isRed(node.left.left)) {
+            // Rotate to fix two red nodes in a row
+            swapColors(node, node.left);
+            node = rotateRight(node);
+        }
+        if (isRed(node.left) && isRed(node.right)) {
+            // Restore a temporary 4-node
+            node.color = RedBlackTreeNode.RED;
+            node.left.color = RedBlackTreeNode.BLACK;
+            node.right.color = RedBlackTreeNode.BLACK;
         }
         return node;
     }
@@ -236,6 +201,7 @@ public class RedBlackTree<K extends Comparable<K>, V> extends AbstractTree<K, V,
                 node.left.color = RedBlackTreeNode.BLACK;
                 return node.left;
             } else {
+                // Replace node with its successor (Hibbard).
                 // Delete successor. Copy its value into current node.
                 RedBlackTreeNode<K, V> s = min(node.right);
                 RedBlackTreeNode<K, V> x = delete(node, s.key);

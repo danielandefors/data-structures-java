@@ -219,22 +219,11 @@ abstract class AbstractTree<K extends Comparable<K>, V, NODE extends AbstractTre
                 return node.right;
             } else {
                 // Replace node with its successor (Hibbard).
-                NODE p = node;
-                NODE s = p.right;
-                // Find min in the right subtree.
-                // Decrease parent size by one along the way since we will remove a node from its subtree.
-                while (s.left != null) {
-                    p = s;
-                    p.size--;
-                    s = s.left;
-                }
-                // If the successor has a right subtree, replace it as the new left subtree of the parent.
-                p.left = s.right;
-                // Rewire left and right subtrees for the successor, and recompute its size.
-                s.left = node.left;
-                s.right = node.right;
-                s.size = size(s.left) + size(s.right) + 1;
-                return s;
+                NODE s = min(node.right);
+                NODE x = delete(node, s.key);
+                node.key = s.key;
+                node.value = s.value;
+                return x;
             }
         }
     }
@@ -263,6 +252,36 @@ abstract class AbstractTree<K extends Comparable<K>, V, NODE extends AbstractTre
     protected int size(NODE node) {
         if (node == null) return 0;
         else return node.size;
+    }
+
+    /**
+     * Rotate the tree left at `h`.
+     *
+     * @param h A node.
+     * @return The rotated node that replaces `h`.
+     */
+    protected NODE rotateLeft(NODE h) {
+        NODE x = h.right;
+        h.right = x.left;
+        x.left = h;
+        x.size = h.size;
+        h.size = 1 + size(h.left) + size(h.right);
+        return x;
+    }
+
+    /**
+     * Rotate the tree right at `h`.
+     *
+     * @param h A node.
+     * @return The rotated node that replaces `h`.
+     */
+    protected NODE rotateRight(NODE h) {
+        NODE x = h.left;
+        h.left = x.right;
+        x.right = h;
+        x.size = h.size;
+        h.size = 1 + size(h.left) + size(h.right);
+        return x;
     }
 
 }
