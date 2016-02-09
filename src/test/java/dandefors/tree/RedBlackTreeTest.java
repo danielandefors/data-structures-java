@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -35,49 +35,15 @@ public class RedBlackTreeTest
 
      */
 
+    /**
+     * Toggle this field to enable dumping trees before and after an error occurred.
+     */
+    private static boolean DUMP_TREES = false;
+
     @FunctionalInterface
     interface InvariantTest {
         void test(RedBlackTreeNode<?, ?> node);
     }
-
-    /**
-     * Validate that delete-min works on all permutations of the input array.
-     *
-     * @param tester The invariant tester.
-     * @param s      The input array.
-     */
-    private void validateDeleteMinAllPermutations(InvariantTest tester, String... s) {
-
-
-        for (String[] p : new ArrayPermutations<>(s)) {
-//            validateDeleteMin(tester, p);
-
-            if (p[1].equals("D")) {
-                break;
-            }
-
-            RedBlackTree<String, String> tree = createTree();
-            for (String t : p) {
-                tree.put(t, t);
-            }
-            String fp = fingerprint(tree);
-
-            if (UNIQUE_TREE.add(fp)) {
-                StringBuilder out = new StringBuilder();
-                out.append("{");
-                for (int i = 0; i < p.length; i++) {
-                    if (i > 0) out.append(", ");
-                    out.append('"').append(p[i]).append('"');
-                }
-                out.append("},");
-                System.out.println(out);
-            }
-
-        }
-
-    }
-
-    private static final Set<String> UNIQUE_TREE = new HashSet<>();
 
     /**
      * Validate that put works on the given array.
@@ -150,29 +116,38 @@ public class RedBlackTreeTest
      */
     private void validateDelete(InvariantTest tester, String... s) {
 
-        Integer[] order = new Integer[s.length];
-        for (int i = 0; i < s.length; i++) {
-            order[i] = i;
+        Iterable<Integer[]> indices;
+        if (s.length < 8) {
+            Integer[] order = new Integer[s.length];
+            for (int i = 0; i < s.length; i++) {
+                order[i] = i;
+            }
+            indices = ArrayPermutations.of(order);
+        } else {
+            List<Integer[]> l = new ArrayList<>();
+//            int step = s.length / 4;
+//            for (int i = 0; i < step; i++) {
+//                Integer[] ix = new Integer[4];
+//                for (int j = 0; j < ix.length; j++) {
+//                    ix[j] = (step * j + i) % s.length;
+//                }
+//                l.add(ix);
+//            }
+            for (int i = 0; i < s.length; i++) {
+                l.add(new Integer[]{i});
+            }
+            indices = l;
         }
 
-        ArrayPermutations<Integer> perms = ArrayPermutations.of(order);
-        int tests = 0;
-
-        for (Integer[] ix : perms) {
-
-            // Cap number of tests at 100
-            if (tests++ > 100) {
-                break;
-            }
+        for (Integer[] ix : indices) {
 
             RedBlackTree<String, String> tree = createTree();
             for (String t : s) {
                 tree.put(t, t);
             }
 
-            int d = s.length / 4 + 1;
-            for (int i = 0; i < s.length; i++) {
-                String key = s[(ix[i] + d) % s.length];
+            for (int i = 0; i < ix.length; i++) {
+                String key = s[ix[i]];
                 String before = dumpTree(tree);
                 tree.delete(key);
                 assertFalse(tree.contains(key));
@@ -195,6 +170,7 @@ public class RedBlackTreeTest
      * @return Its structure as a human readable string.
      */
     private static String dumpTree(RedBlackTree<String, String> tree) {
+        if (!DUMP_TREES) return "";
         StringWriter s = new StringWriter();
         dumpTree(tree.getRoot(), 0, new PrintWriter(s, true));
         return s.toString();
@@ -224,26 +200,6 @@ public class RedBlackTreeTest
         }
     }
 
-    private static String fingerprint(RedBlackTree<String, String> tree) {
-        StringBuilder s = new StringBuilder();
-        fingerprint(tree.getRoot(), s);
-        return s.toString();
-    }
-
-    private static void fingerprint(RedBlackTreeNode<String, String> node, StringBuilder s) {
-        s.append("{");
-        if (node != null) {
-            fingerprint(node.getLeft(), s);
-            s.append(node.key);
-            if (node.isRed()) {
-                s.append(":red");
-            }
-            fingerprint(node.getRight(), s);
-        }
-        s.append("}");
-    }
-
-
     /**
      * Modifies the tree in various ways and invokes the tester after each
      * modification to make sure a given invariant is maintained.
@@ -258,28 +214,25 @@ public class RedBlackTreeTest
         Then again, if we do that we might miss bug because of a side effect that we didn't consider.
          */
 
-        for (String[] input : TREES) {
+        for (String[] input : TreeTestData.TREES) {
             validatePut(tester, input);
             validateDeleteMin(tester, input);
             validateDeleteMax(tester, input);
             validateDelete(tester, input);
         }
 
-        // Testing all permutations is overkill
-        // validateDeleteMinAllPermutations(tester, "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O");
-
-        String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-
-        validatePut(tester, abc);
-        validateDeleteMin(tester, abc);
-        validateDeleteMax(tester, abc);
-        validateDelete(tester, abc);
-
-        String[] all = ALL.toArray(new String[ALL.size()]);
-        validatePut(tester, all);
-        validateDeleteMin(tester, all);
-        validateDeleteMax(tester, all);
-        validateDelete(tester, all);
+//        String[] abc = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+//        validatePut(tester, abc);
+//        validateDeleteMin(tester, abc);
+//        validateDeleteMax(tester, abc);
+//        validateDelete(tester, abc);
+//
+//        Set<String> allSet = new HashSet<>(ALL);
+//        String[] all = allSet.toArray(new String[allSet.size()]);
+//        validatePut(tester, all);
+//        validateDeleteMin(tester, all);
+//        validateDeleteMax(tester, all);
+//        validateDelete(tester, all);
 
     }
 
@@ -346,229 +299,5 @@ public class RedBlackTreeTest
     private static boolean isRed(RedBlackTreeNode<?, ?> node) {
         return node != null && node.isRed();
     }
-
-    /**
-     * Input arrays from which to build trees. Each array produces a unique red-black tree structure.
-     */
-    private static final String[][] TREES = {
-
-            {"A"},
-
-            {"A", "B"},
-
-            {"A", "B", "C"},
-
-            {"A", "B", "C", "D"},
-            {"A", "C", "D", "B"},
-
-            {"A", "B", "C", "D", "E"},
-            {"A", "C", "D", "B", "E"},
-
-            {"A", "B", "C", "D", "E", "F"},
-            {"A", "B", "C", "E", "F", "D"},
-            {"A", "C", "D", "B", "E", "F"},
-
-            {"A", "B", "C", "D", "E", "F", "G"},
-            {"A", "B", "C", "E", "F", "D", "G"},
-            {"A", "C", "D", "B", "E", "F", "G"},
-            {"A", "C", "D", "B", "F", "G", "E"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H"},
-            {"A", "B", "C", "D", "E", "G", "H", "F"},
-            {"A", "B", "C", "E", "F", "D", "G", "H"},
-            {"A", "C", "D", "B", "E", "F", "G", "H"},
-            {"A", "C", "D", "B", "F", "G", "E", "H"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "K"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "K"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "J", "K", "I"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "K"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "J", "K", "I"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J", "K"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J", "K"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "K"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "K"},
-            {"A", "B", "C", "G", "H", "D", "J", "K", "E", "F", "I"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "K"},
-            {"A", "B", "C", "G", "H", "E", "J", "K", "F", "D", "I"},
-            {"A", "B", "C", "H", "I", "E", "J", "K", "F", "D", "G"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "K"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "J", "K", "I"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J", "K"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J", "K"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "K"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "K"},
-            {"A", "C", "D", "B", "G", "H", "E", "J", "K", "F", "I"},
-            {"A", "C", "D", "B", "H", "I", "E", "J", "K", "F", "G"},
-            {"A", "C", "D", "B", "H", "I", "F", "J", "K", "G", "E"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"},
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "J"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "K", "L"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "K", "L"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "J", "K", "I", "L"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "K", "L"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "J", "K", "I", "L"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J", "K", "L"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "K", "L", "J"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J", "K", "L"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "K", "L", "J"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "K", "L"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "K", "L"},
-            {"A", "B", "C", "G", "H", "D", "J", "K", "E", "F", "I", "L"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "K", "L"},
-            {"A", "B", "C", "G", "H", "E", "J", "K", "F", "D", "I", "L"},
-            {"A", "B", "C", "H", "I", "E", "J", "K", "F", "D", "G", "L"},
-            {"A", "B", "C", "H", "I", "E", "K", "L", "F", "D", "G", "J"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "K", "L"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "J", "K", "I", "L"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J", "K", "L"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "K", "L", "J"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J", "K", "L"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "K", "L", "J"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "K", "L"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "K", "L"},
-            {"A", "C", "D", "B", "G", "H", "E", "J", "K", "F", "I", "L"},
-            {"A", "C", "D", "B", "H", "I", "E", "J", "K", "F", "G", "L"},
-            {"A", "C", "D", "B", "H", "I", "E", "K", "L", "F", "G", "J"},
-            {"A", "C", "D", "B", "H", "I", "F", "J", "K", "G", "E", "L"},
-            {"A", "C", "D", "B", "H", "I", "F", "K", "L", "G", "E", "J"},
-            {"A", "C", "D", "B", "I", "J", "F", "K", "L", "G", "E", "H"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"},
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "J", "M"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "K", "L", "M"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "L", "M", "K"},
-            {"A", "B", "C", "D", "E", "F", "G", "J", "K", "H", "L", "M", "I"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "K", "L", "M"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "L", "M", "K"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "J", "K", "I", "L", "M"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "K", "L", "M"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "L", "M", "K"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "J", "K", "I", "L", "M"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J", "K", "L", "M"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "K", "L", "J", "M"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J", "K", "L", "M"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "K", "L", "J", "M"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "K", "L", "M"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "L", "M", "K"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "K", "L", "M"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "L", "M", "K"},
-            {"A", "B", "C", "G", "H", "D", "J", "K", "E", "F", "I", "L", "M"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "K", "L", "M"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "L", "M", "K"},
-            {"A", "B", "C", "G", "H", "E", "J", "K", "F", "D", "I", "L", "M"},
-            {"A", "B", "C", "H", "I", "E", "J", "K", "F", "D", "G", "L", "M"},
-            {"A", "B", "C", "H", "I", "E", "K", "L", "F", "D", "G", "J", "M"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "K", "L", "M"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "L", "M", "K"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "J", "K", "I", "L", "M"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J", "K", "L", "M"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "K", "L", "J", "M"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J", "K", "L", "M"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "K", "L", "J", "M"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "K", "L", "M"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "L", "M", "K"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "K", "L", "M"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "L", "M", "K"},
-            {"A", "C", "D", "B", "G", "H", "E", "J", "K", "F", "I", "L", "M"},
-            {"A", "C", "D", "B", "H", "I", "E", "J", "K", "F", "G", "L", "M"},
-            {"A", "C", "D", "B", "H", "I", "E", "K", "L", "F", "G", "J", "M"},
-            {"A", "C", "D", "B", "H", "I", "F", "J", "K", "G", "E", "L", "M"},
-            {"A", "C", "D", "B", "H", "I", "F", "K", "L", "G", "E", "J", "M"},
-            {"A", "C", "D", "B", "I", "J", "F", "K", "L", "G", "E", "H", "M"},
-            {"A", "C", "D", "B", "I", "J", "F", "L", "M", "G", "E", "H", "K"},
-
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"},
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "M", "N", "L"},
-            {"A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "J", "M", "N"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "K", "L", "M", "N"},
-            {"A", "B", "C", "D", "E", "F", "G", "I", "J", "H", "L", "M", "K", "N"},
-            {"A", "B", "C", "D", "E", "F", "G", "J", "K", "H", "L", "M", "I", "N"},
-            {"A", "B", "C", "D", "E", "F", "G", "J", "K", "H", "M", "N", "I", "L"},
-            {"A", "B", "C", "D", "E", "F", "G", "K", "L", "H", "M", "N", "I", "J"},
-            {"A", "B", "C", "D", "E", "F", "G", "K", "L", "I", "M", "N", "J", "H"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "K", "L", "M", "N"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "I", "J", "L", "M", "K", "N"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "J", "K", "I", "L", "M", "N"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "J", "K", "I", "M", "N", "L"},
-            {"A", "B", "C", "D", "E", "G", "H", "F", "K", "L", "I", "M", "N", "J"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "K", "L", "M", "N"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "I", "J", "L", "M", "K", "N"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "J", "K", "I", "L", "M", "N"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "J", "K", "I", "M", "N", "L"},
-            {"A", "B", "C", "E", "F", "D", "G", "H", "K", "L", "I", "M", "N", "J"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J", "K", "L", "M", "N"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "J", "K", "M", "N", "L"},
-            {"A", "B", "C", "E", "F", "D", "H", "I", "G", "K", "L", "J", "M", "N"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J", "K", "L", "M", "N"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "J", "K", "M", "N", "L"},
-            {"A", "B", "C", "F", "G", "D", "H", "I", "E", "K", "L", "J", "M", "N"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "K", "L", "M", "N"},
-            {"A", "B", "C", "F", "G", "D", "I", "J", "E", "H", "L", "M", "K", "N"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "K", "L", "M", "N"},
-            {"A", "B", "C", "G", "H", "D", "I", "J", "E", "F", "L", "M", "K", "N"},
-            {"A", "B", "C", "G", "H", "D", "J", "K", "E", "F", "I", "L", "M", "N"},
-            {"A", "B", "C", "G", "H", "D", "J", "K", "E", "F", "I", "M", "N", "L"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "K", "L", "M", "N"},
-            {"A", "B", "C", "G", "H", "E", "I", "J", "F", "D", "L", "M", "K", "N"},
-            {"A", "B", "C", "G", "H", "E", "J", "K", "F", "D", "I", "L", "M", "N"},
-            {"A", "B", "C", "G", "H", "E", "J", "K", "F", "D", "I", "M", "N", "L"},
-            {"A", "B", "C", "H", "I", "E", "J", "K", "F", "D", "G", "L", "M", "N"},
-            {"A", "B", "C", "H", "I", "E", "J", "K", "F", "D", "G", "M", "N", "L"},
-            {"A", "B", "C", "H", "I", "E", "K", "L", "F", "D", "G", "J", "M", "N"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "I", "J", "L", "M", "K", "N"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "J", "K", "I", "L", "M", "N"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "J", "K", "I", "M", "N", "L"},
-            {"A", "C", "D", "B", "E", "F", "G", "H", "K", "L", "I", "M", "N", "J"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J", "K", "L", "M", "N"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "J", "K", "M", "N", "L"},
-            {"A", "C", "D", "B", "E", "F", "H", "I", "G", "K", "L", "J", "M", "N"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J", "K", "L", "M", "N"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "J", "K", "M", "N", "L"},
-            {"A", "C", "D", "B", "F", "G", "E", "H", "I", "K", "L", "J", "M", "N"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "K", "L", "M", "N"},
-            {"A", "C", "D", "B", "F", "G", "E", "I", "J", "H", "L", "M", "K", "N"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "K", "L", "M", "N"},
-            {"A", "C", "D", "B", "G", "H", "E", "I", "J", "F", "L", "M", "K", "N"},
-            {"A", "C", "D", "B", "G", "H", "E", "J", "K", "F", "I", "L", "M", "N"},
-            {"A", "C", "D", "B", "G", "H", "E", "J", "K", "F", "I", "M", "N", "L"},
-            {"A", "C", "D", "B", "H", "I", "E", "J", "K", "F", "G", "L", "M", "N"},
-            {"A", "C", "D", "B", "H", "I", "E", "J", "K", "F", "G", "M", "N", "L"},
-            {"A", "C", "D", "B", "H", "I", "E", "K", "L", "F", "G", "J", "M", "N"},
-            {"A", "C", "D", "B", "H", "I", "F", "J", "K", "G", "E", "L", "M", "N"},
-            {"A", "C", "D", "B", "H", "I", "F", "J", "K", "G", "E", "M", "N", "L"},
-            {"A", "C", "D", "B", "H", "I", "F", "K", "L", "G", "E", "J", "M", "N"},
-            {"A", "C", "D", "B", "I", "J", "F", "K", "L", "G", "E", "H", "M", "N"},
-            {"A", "C", "D", "B", "I", "J", "F", "L", "M", "G", "E", "H", "K", "N"},
-
-    };
-
 
 }
