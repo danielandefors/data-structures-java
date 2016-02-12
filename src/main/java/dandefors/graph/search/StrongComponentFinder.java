@@ -5,8 +5,11 @@ import dandefors.stack.IntStack;
 
 /**
  * Finds strongly connected components (DFS).
+ * Based on Tarjan's algorithm.
  */
 public class StrongComponentFinder extends EdgeClassifier {
+
+    // https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm
 
     private int components;
     private final int[] low;
