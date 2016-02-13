@@ -2,6 +2,15 @@
 
 ... and other stuff that I've created for fun (mostly).
 
+## Data Structures
+
+Notable data structures.
+
+* AVL Tree
+* Red Black Tree
+* Hash Table
+* Heaps, stacks, and queues
+
 ## Graphs
 
 Are fun.
