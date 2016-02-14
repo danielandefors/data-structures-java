@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class ArrayPermutationsTest {
+public class LazyPermutationsTest {
 
     /*
     The timeout on each test is there because of the subtle logic
@@ -20,7 +20,7 @@ public class ArrayPermutationsTest {
 
     @Test(timeout = 200)
     public void testArray0() {
-        ArrayPermutations<String> perm = new ArrayPermutations<>();
+        LazyPermutations<String> perm = new LazyPermutations<>();
         assertEquals(0, perm.size());
         assertFalse(perm.iterator().hasNext());
     }
@@ -28,7 +28,7 @@ public class ArrayPermutationsTest {
 
     @Test(timeout = 200)
     public void testArray1() {
-        ArrayPermutations<String> perm = new ArrayPermutations<>("A");
+        LazyPermutations<String> perm = new LazyPermutations<>("A");
         Iterator<String[]> itr = perm.iterator();
         assertArrayEquals(array("A"), itr.next());
         assertFalse(itr.hasNext());
@@ -37,7 +37,7 @@ public class ArrayPermutationsTest {
 
     @Test(timeout = 200)
     public void testArray2() {
-        ArrayPermutations<String> perm = new ArrayPermutations<>("A", "B");
+        LazyPermutations<String> perm = new LazyPermutations<>("A", "B");
         Iterator<String[]> itr = perm.iterator();
         assertArrayEquals(array("A", "B"), itr.next());
         assertArrayEquals(array("B", "A"), itr.next());
@@ -47,7 +47,7 @@ public class ArrayPermutationsTest {
 
     @Test(timeout = 200)
     public void testArray3() {
-        ArrayPermutations<String> perm = new ArrayPermutations<>("A", "B", "C");
+        LazyPermutations<String> perm = new LazyPermutations<>("A", "B", "C");
         assertEquals(6, perm.size());
         Iterator<String[]> itr = perm.iterator();
         assertArrayEquals(array("A", "B", "C"), itr.next());
@@ -63,13 +63,13 @@ public class ArrayPermutationsTest {
 
     @Test(timeout = 200, expected = NoSuchElementException.class)
     public void testNextOnEmpty() {
-        new ArrayPermutations<>().iterator().next();
+        new LazyPermutations<>().iterator().next();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateNull() {
         String[] input = null;
-        ArrayPermutations<String> perm = new ArrayPermutations<>(input);
+        LazyPermutations<String> perm = new LazyPermutations<>(input);
         perm.size();
     }
 

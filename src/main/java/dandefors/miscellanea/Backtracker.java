@@ -8,20 +8,18 @@ import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 
 /**
- * Basic combinatorial search stuff.
+ * Backtrack over all configurations of a search space.
  */
-public final class CombinatorialSearch {
+public final class Backtracker {
 
     /**
      * Iterate through all possible configurations of a search space,
      * using the general backtracking algorithm.
      *
      * @param strategy The backtracking strategy.
-     * @param <T>      The input type.
-     * @param <BT>     The strategy type.
      * @return The strategy, after the algorithm is complete.
      */
-    public static <T, BT extends BacktrackStrategy<T>> BT backtrack(BT strategy) {
+    public <T, BT extends BacktrackStrategy<T>> BT backtrack(BT strategy) {
         backtrack(0, strategy);
         return strategy;
     }
@@ -31,10 +29,9 @@ public final class CombinatorialSearch {
      *
      * @param k        The current element index.
      * @param strategy The strategy to employ.
-     * @param <T>      The input type.
      * @return True if the search should continue.
      */
-    private static <T> boolean backtrack(int k, BacktrackStrategy<T> strategy) {
+    private <T> boolean backtrack(int k, BacktrackStrategy<T> strategy) {
         if (strategy.isSolution(k)) {
             return strategy.processSolution(k);
         } else {
@@ -54,10 +51,9 @@ public final class CombinatorialSearch {
      *
      * @param input    An array of elements.
      * @param consumer Receives all permutations of the array.
-     * @param <T>      The element type.
      */
     public static <T> void permutations(T[] input, Consumer<T[]> consumer) {
-        backtrack(new Permutations<>(input, consumer)).getPermutations();
+        new Backtracker().backtrack(new Permutations<>(input, consumer)).getPermutations();
     }
 
     /**
@@ -158,7 +154,7 @@ public final class CombinatorialSearch {
      * @param <T>      The element type.
      */
     public static <T> void subsets(T[] input, Consumer<T[]> consumer) {
-        backtrack(new Subsets<>(input, consumer));
+        new Backtracker().backtrack(new Subsets<>(input, consumer));
     }
 
     /**

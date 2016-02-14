@@ -1,6 +1,6 @@
 package dandefors.tree;
 
-import dandefors.miscellanea.ArrayPermutations;
+import dandefors.miscellanea.LazyPermutations;
 import org.junit.Test;
 
 import java.io.PrintWriter;
@@ -134,7 +134,7 @@ public class RedBlackTreeTest
             for (int i = 0; i < s.length; i++) {
                 order[i] = i;
             }
-            indices = ArrayPermutations.of(order);
+            indices = LazyPermutations.of(order);
         } else {
             List<Integer[]> l = new ArrayList<>();
             int ops = 4;

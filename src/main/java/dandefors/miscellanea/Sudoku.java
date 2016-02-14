@@ -121,7 +121,7 @@ public class Sudoku {
      * @return True if a solution was found.
      */
     public boolean solve() {
-        return CombinatorialSearch.backtrack(new Solver(this)).isSolved();
+        return new Backtracker().backtrack(new Solver(this)).isSolved();
     }
 
     /**

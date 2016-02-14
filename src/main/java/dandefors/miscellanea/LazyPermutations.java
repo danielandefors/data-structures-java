@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Lazy permutation generator.
  */
-public class ArrayPermutations<T> implements Iterable<T[]> {
+public class LazyPermutations<T> implements Iterable<T[]> {
 
     /**
      * Get the factorial of `n`.
@@ -37,7 +37,7 @@ public class ArrayPermutations<T> implements Iterable<T[]> {
      * @throws IllegalArgumentException If the input array is null.
      */
     @SafeVarargs
-    public ArrayPermutations(T... input) {
+    public LazyPermutations(T... input) {
         if (input == null) {
             throw new IllegalArgumentException();
         }
@@ -53,8 +53,8 @@ public class ArrayPermutations<T> implements Iterable<T[]> {
      * @return A generator for all permutations of the input array.
      */
     @SafeVarargs
-    public static <T> ArrayPermutations<T> of(T... input) {
-        return new ArrayPermutations<>(input);
+    public static <T> LazyPermutations<T> of(T... input) {
+        return new LazyPermutations<>(input);
     }
 
     @Override

@@ -11,14 +11,14 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class CombinatorialSearchTest {
+public class BacktrackerTest {
 
     @Test
     public void testPermutations() {
 
         String[] input = {"A", "B", "C"};
         List<String[]> perm = new LinkedList<>();
-        CombinatorialSearch.permutations(input, perm::add);
+        Backtracker.permutations(input, perm::add);
         Iterator<String[]> itr = perm.iterator();
 
         assertArrayEquals(new String[]{"A", "B", "C"}, itr.next());
@@ -36,7 +36,7 @@ public class CombinatorialSearchTest {
 
         String[] input = {"A", "B", "C"};
         List<String[]> ss = new LinkedList<>();
-        CombinatorialSearch.subsets(input, ss::add);
+        Backtracker.subsets(input, ss::add);
 
         Iterator<String[]> itr = ss.iterator();
         assertArrayEquals(new String[]{"A", "B", "C"}, itr.next());
