@@ -49,7 +49,7 @@ public class Sudoku {
         }
         int[] p = new int[DIMENSION];
         int c = possible(x, y, p);
-        if (c == 0 || Arrays.binarySearch(p, 0, c, value) < 0) {
+        if (Arrays.binarySearch(p, 0, c, value) < 0) {
             throw new IllegalArgumentException("value not possible");
         }
         matrix[x][y] = value;
@@ -124,8 +124,14 @@ public class Sudoku {
         return CombinatorialSearch.backtrack(new Solver(this)).isSolved();
     }
 
+    /**
+     * Solves Sudoku puzzles by searching through all possible moves.
+     */
     private static final class Solver implements BacktrackStrategy<Integer> {
 
+        /**
+         * A square on the board.
+         */
         static class Square {
 
             final int x;

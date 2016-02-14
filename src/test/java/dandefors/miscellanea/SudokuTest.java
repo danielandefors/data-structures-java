@@ -3,6 +3,8 @@ package dandefors.miscellanea;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.*;
 
@@ -90,6 +92,47 @@ public class SudokuTest {
         s.set(2, 4, 1);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetIllegalValue() {
+        Sudoku s = new Sudoku();
+        s.set(0, 0, 10);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetIllegalValueLow() {
+        Sudoku s = new Sudoku();
+        s.set(0, 0, 0);
+    }
+
+    @Test
+    public void testPossible() {
+        Sudoku s = new Sudoku();
+        Iterator<Integer> x = s.possible(0, 0).iterator();
+        assertEquals(1, x.next().intValue());
+        assertEquals(2, x.next().intValue());
+        assertEquals(3, x.next().intValue());
+        assertEquals(4, x.next().intValue());
+        assertEquals(5, x.next().intValue());
+        assertEquals(6, x.next().intValue());
+        assertEquals(7, x.next().intValue());
+        assertEquals(8, x.next().intValue());
+        assertEquals(9, x.next().intValue());
+        assertFalse(x.hasNext());
+    }
+
+    @Test(expected = NoSuchElementException.class, timeout = 1000)
+    public void testPossibleIterator() {
+        Iterator<Integer> itr = new Sudoku().possible(0, 0).iterator();
+        while (true) {
+            itr.next();
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPossibleIncorrectArrayLength() {
+        new Sudoku().possible(0, 0, new int[11]);
+    }
+
     @Test
     public void testSolveEasy() {
 
@@ -104,14 +147,14 @@ public class SudokuTest {
 
         String answer =
                 "1 2 3 4 5 6 7 8 9 \n" +
-                "4 5 6 7 8 9 1 2 3 \n" +
-                "7 8 9 1 2 3 4 5 6 \n" +
-                "2 1 4 3 6 5 8 9 7 \n" +
-                "3 6 5 8 9 7 2 1 4 \n" +
-                "8 9 7 2 1 4 3 6 5 \n" +
-                "5 3 1 6 4 2 9 7 8 \n" +
-                "6 4 2 9 7 8 5 3 1 \n" +
-                "9 7 8 5 3 1 6 4 2 \n";
+                        "4 5 6 7 8 9 1 2 3 \n" +
+                        "7 8 9 1 2 3 4 5 6 \n" +
+                        "2 1 4 3 6 5 8 9 7 \n" +
+                        "3 6 5 8 9 7 2 1 4 \n" +
+                        "8 9 7 2 1 4 3 6 5 \n" +
+                        "5 3 1 6 4 2 9 7 8 \n" +
+                        "6 4 2 9 7 8 5 3 1 \n" +
+                        "9 7 8 5 3 1 6 4 2 \n";
 
         assertEquals(answer, s.toString());
 
@@ -147,14 +190,14 @@ public class SudokuTest {
 
         String answer =
                 "6 7 3 8 9 4 5 1 2 \n" +
-                "9 1 2 7 3 5 4 8 6 \n" +
-                "8 4 5 6 1 2 9 7 3 \n" +
-                "7 9 8 2 6 1 3 5 4 \n" +
-                "5 2 6 4 7 3 8 9 1 \n" +
-                "1 3 4 5 8 9 2 6 7 \n" +
-                "4 6 9 1 2 8 7 3 5 \n" +
-                "2 8 7 3 5 6 1 4 9 \n" +
-                "3 5 1 9 4 7 6 2 8 \n";
+                        "9 1 2 7 3 5 4 8 6 \n" +
+                        "8 4 5 6 1 2 9 7 3 \n" +
+                        "7 9 8 2 6 1 3 5 4 \n" +
+                        "5 2 6 4 7 3 8 9 1 \n" +
+                        "1 3 4 5 8 9 2 6 7 \n" +
+                        "4 6 9 1 2 8 7 3 5 \n" +
+                        "2 8 7 3 5 6 1 4 9 \n" +
+                        "3 5 1 9 4 7 6 2 8 \n";
 
         assertEquals(answer, s.toString());
 
