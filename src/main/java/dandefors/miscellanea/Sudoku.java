@@ -181,7 +181,8 @@ public class Sudoku {
 
         @Override
         public void makeMove(Integer candidate, int k) {
-            sudoku.set(free[k].x, free[k].y, candidate);
+//            sudoku.set(free[k].x, free[k].y, candidate);
+            sudoku.matrix[free[k].x][free[k].y] = candidate;
         }
 
         @Override
