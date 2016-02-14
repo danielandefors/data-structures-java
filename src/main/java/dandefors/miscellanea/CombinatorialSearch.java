@@ -93,7 +93,7 @@ public final class CombinatorialSearch {
 
         @Override
         public Iterable<Integer> getCandidates(int k) {
-            return () -> new IndexIterator(marked);
+            return () -> new AvailableIndexIterator(marked);
         }
 
         @Override
@@ -112,13 +112,16 @@ public final class CombinatorialSearch {
         }
     }
 
-    private static final class IndexIterator implements Iterator<Integer> {
+    /**
+     * Iterates over all available indices.
+     */
+    private static final class AvailableIndexIterator implements Iterator<Integer> {
 
         private boolean[] marked;
         private int index;
         private int next;
 
-        public IndexIterator(boolean[] marked) {
+        public AvailableIndexIterator(boolean[] marked) {
             this.marked = marked;
             this.index = 0;
             this.next = -1;
